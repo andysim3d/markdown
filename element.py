@@ -17,8 +17,7 @@ class Element(object):
         
     def inner_text(self):
         "inner text or nested elements as string format"
-        p = [i._render() for i in self.content()]
-        return "".join(p)
+        return str(self._content)
 
     def _render(self):
         pass
@@ -27,3 +26,48 @@ class Element(object):
         """Could this element hold other elements inside, True for yes.
         """
         return False
+
+class Paragraph(Element):
+    def __init__(self, content):
+        super().__init__(content)
+
+    def nested(self):
+        """All paragraph elements probably contains children.
+        """
+        return True
+
+class Block(Element):
+    def __init__(self, content):
+        super().__init__(content)
+
+    def nested(self):
+        """All paragraph elements probably contains children.
+        """
+        return False
+    
+    def children(self):
+        return None
+
+class TextBlock(Block):
+    """Pure text block"""
+    def __init__(self, content):
+        super().__init__(content)
+
+    def render(self):
+        return str(self._content)
+
+class QuoteParagraph(Paragraph):
+    """Element decorated by '>'.
+    """
+    def __init__(self, content):
+        super().__init__(content)
+
+    def render(self) -> str:
+        return "<blockquote> {} </blockquote>".format(self.inner_text())
+
+class ImgBlock(Block):
+    def __init__(self, content, url):
+        super().__init__(content)
+        self._url = url
+    def render(self) -> str:
+        return "<img src='{}' alt='{}'> </img>".format(self._url, self.inner_text())
