@@ -71,3 +71,46 @@ class ImgBlock(Block):
         self._url = url
     def render(self) -> str:
         return "<img src='{}' alt='{}'> </img>".format(self._url, self.inner_text())
+
+class ItalicBlock(Block):
+    """Element wrapped by '*' or '_'
+    """
+    def __init__(self, content):
+        super().__init__(content)
+    
+    def render(self) -> str:
+        return f"<em>{self.inner_text()}</em>"
+
+class UnorderedParagraph(Paragraph):
+    """Line starting with '-', '*' or '+'
+    """
+    def __init__(self, content, isStart=None, isEnd=None):
+        super().__init__(content)
+        self._isStart = isStart
+        self._isEnd = isEnd
+    
+    def render(self) -> str:
+        item = f"<li>{self.inner_text()}</li>"
+        if self._isStart == None and self._isEnd == None:
+            return item
+        elif self._isStart:
+            return f"<ul>{item}"
+        elif self._isEnd:
+            return f"{item}</ul>"
+
+class LinkBlock(Block):
+    def __init__(self, content, url):
+        super().__init__(content)
+        self._url = url
+    
+    def render(self) -> str:
+        return f"<a href='{self._url}'>{self.inner_text()}</a>"
+
+class StrikethroughBlock(Block):
+    """Element wrapped by '~'
+    """
+    def __init__(self, content):
+        super().__init__(content)
+    
+    def render(self) -> str:
+        return f"<del>{self.inner_text()}</del>"
