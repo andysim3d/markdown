@@ -10,5 +10,4 @@ from quote import QuoteParagraph
 )
 def test_render(content, html):
     quote = QuoteParagraph(content)
-    assert html == quote.render()  
-
+    assert html == quote.render()

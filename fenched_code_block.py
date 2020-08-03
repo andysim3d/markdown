@@ -11,6 +11,3 @@ class FenchedCodeBlock(Block):
 
     def _render(self):
         return '<code>{}</code>'.format(self.content())
-
-
-        

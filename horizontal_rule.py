@@ -6,6 +6,3 @@ class HorizontalRule(Paragraph):
     '''
     def _render(self):
         return '<hr>'
-
-
-        
