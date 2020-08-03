@@ -17,8 +17,7 @@ class Element(object):
         
     def inner_text(self):
         "inner text or nested elements as string format"
-        p = [i._render() for i in self.content()]
-        return "".join(p)
+        return str(self._content)
 
     def _render(self):
         pass
