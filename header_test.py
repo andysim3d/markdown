@@ -1,18 +1,30 @@
 import pytest
+<<<<<<< HEAD
 from header import Header, parser
+=======
+from header import Header
+
+>>>>>>> 6b1a3d70e9c5e7aaaac83089c324040a1fd90445
 
 @pytest.mark.parametrize(
     "content, level, html",
     [
+<<<<<<< HEAD
         ('title', 1, '<h1>title</h1>'),
         ('another second title', 2 ,'<h2>another second title</h2>'),
         ('title_3',3, '<h3>title_3</h3>'),
+=======
+        ('title', 1, '<h1> title </h1>'),
+        ('another second title', 2 ,'<h2> another second title </h2>'),
+        ('title_3',3, '<h3> title_3 </h3>'),
+>>>>>>> 6b1a3d70e9c5e7aaaac83089c324040a1fd90445
     ]
 )
 def test_render(content, level, html):
     header = Header(content, level)
     assert html == header.render()  
 
+<<<<<<< HEAD
 @pytest.mark.parametrize(
     'content, expected_html',
     [
@@ -40,3 +52,5 @@ def test_header_parse_failed(content):
     assert start == -1
     assert end == -1
     assert header is None
+=======
+>>>>>>> 6b1a3d70e9c5e7aaaac83089c324040a1fd90445
