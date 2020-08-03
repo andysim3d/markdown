@@ -1,9 +1,6 @@
 from paragraph import Paragraph
-<<<<<<< HEAD
 import re
 import typing
-=======
->>>>>>> 6b1a3d70e9c5e7aaaac83089c324040a1fd90445
 
 class Header(Paragraph):
     def __init__(self, content, level = 1):
@@ -12,7 +9,6 @@ class Header(Paragraph):
         self._level = level
     
     def render(self):
-<<<<<<< HEAD
         return "<h{0}>{1}</h{0}>".format(self._level, self.content())
 
 
@@ -32,7 +28,3 @@ def parser(content: typing.Text) -> (int, int, Header):
     if header:
         return 0, len(content), header
     return (-1, -1, None)
-
-=======
-        return "<h{0}> {1} </h{0}>".format(self._level, self.content())
->>>>>>> 6b1a3d70e9c5e7aaaac83089c324040a1fd90445
