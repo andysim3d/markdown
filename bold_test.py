@@ -1,5 +1,5 @@
-from bold import BoldBlock
 import pytest
+from bold import BoldBlock
 
 
 @pytest.mark.parametrize(
@@ -11,4 +11,4 @@ import pytest
 )
 def test_render(content, html):
     bold = BoldBlock(content)
-    assert html == bold.render() 
+    assert html == bold.render()

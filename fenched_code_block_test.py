@@ -1,5 +1,5 @@
-from fenched_code_block import FenchedCodeBlock
 import pytest
+from fenched_code_block import FenchedCodeBlock
 
 
 @pytest.mark.parametrize(
@@ -11,4 +11,4 @@ import pytest
 )
 def test_render(content, html):
     fcb = FenchedCodeBlock(content)
-    assert html == fcb.render() 
+    assert html == fcb.render()

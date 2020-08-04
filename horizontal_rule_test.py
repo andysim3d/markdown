@@ -1,6 +1,6 @@
 from horizontal_rule import HorizontalRule
-import pytest
+
 
 def test_render():
-    hr = HorizontalRule('')
-    assert '<hr>' == hr.render() 
+    horiz_rule = HorizontalRule('')
+    assert horiz_rule.render() == '<hr>'

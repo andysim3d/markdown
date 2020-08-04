@@ -1,7 +1,7 @@
 class Element(object):
     """Super class for any objects"""
     def __init__(self, content):
-        self._content = content # text content 
+        self._content = content # text content
         self._children = []
         self._parent = None
 
@@ -14,7 +14,7 @@ class Element(object):
 
     def children(self):
         return self._children
-        
+
     def inner_text(self):
         "inner text or nested elements as string format"
         return str(self._content)
