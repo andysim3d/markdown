@@ -1,5 +1,5 @@
 import pytest
-from header import Header, parser
+from header import Header
 
 @pytest.mark.parametrize(
     "content, level, html",
@@ -22,7 +22,7 @@ def test_render(content, level, html):
     ]
 )
 def test_header_parse_success(content, expected_html):
-    start, end, header = parser(content)
+    start, end, header = Header.parse(content)
     assert start == 0
     assert end == len(content)
     assert header is not None
