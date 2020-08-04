@@ -1,6 +1,6 @@
-from paragraph import Paragraph
 import re
 import typing
+from paragraph import Paragraph
 
 class Header(Paragraph):
     def __init__(self, content, level=1):
@@ -19,7 +19,7 @@ def parser(content: typing.Text) -> (int, int, Header):
         header = re.search(header_pattern, content)
         if header:
             header_num = len(header.group(2))
-            if (header_num > 6):
+            if header_num > 6:
                 return None
             header_content = header.group(4)
             return Header(level=header_num, content=header_content)
