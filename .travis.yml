@@ -1,4 +1,7 @@
 language: python
 python:
-  - "3.6"      # current default Python on Travis CI
-script: pytest
+  - "3.8"      # current default Python on Travis CI
+install: 
+  - pip install -r requirement.txt
+script: 
+  - pytest --pylint

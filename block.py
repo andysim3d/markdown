@@ -8,7 +8,7 @@ class Block(Element):
         """All paragraph elements probably contains children.
         """
         return False
-    
+
     def children(self):
         return None
 
