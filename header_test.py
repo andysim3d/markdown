@@ -36,7 +36,7 @@ def test_header_parse_success(content, expected_html):
     ]
 )
 def test_header_parse_failed(content):
-    start, end, header = parser(content)
+    start, end, header = Header.parse(content)
     assert start == -1
     assert end == -1
     assert header is None
