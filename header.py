@@ -14,7 +14,7 @@ class Header(Paragraph):
     @staticmethod
     def parse(content):
         """
-        Parse a text content, and return (begin, end, Element) if parseable, 
+        Parse a text content, and return (begin, end, Element) if parseable,
         or (-1, -1, None) that no such a element
         """
         header_pattern = r"^([ ]*)(#+)([ ]*)(.+)$"
