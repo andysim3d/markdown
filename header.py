@@ -12,7 +12,11 @@ class Header(Paragraph):
         return "<h{0}>{1}</h{0}>".format(self._level, self.content())
 
     @staticmethod
-    def parse(content: typing.Text) -> (int, int, Header):
+    def parse(content):
+        """
+        Parse a text content, and return (begin, end, Element) if parseable, 
+        or (-1, -1, None) that no such a element
+        """
         header_pattern = r"^([ ]*)(#+)([ ]*)(.+)$"
         def _parse(content):
             header = re.search(header_pattern, content)
