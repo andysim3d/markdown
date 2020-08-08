@@ -21,13 +21,17 @@ class BoldBlock(Block):
 
         Return (-1, -1, None) if no such match found.
         '''
-        pattern = r'([*]+)(.*?)([*]+)'
+        pattern = r'(\\\*)*([*]+)(.*[^*\\])(\\\*)*([*]+)'
         matches = re.search(pattern, content)
         if matches:
-            head_asterisks_num = len(matches.group(1))
-            tail_asterisks_num = len(matches.group(3))
-            start_index = matches.start(1)
-            end_index = matches.end(3)
+            head_asterisks_num = len(matches.group(2))
+            tail_asterisks_num = len(matches.group(5))
+            start_index = matches.start(2)
+            end_index = matches.end()
+
+            bold_content = ""
+            bold_content += matches.group(3) if matches.group(3) else ""
+            bold_content += matches.group(4) if matches.group(4) else ""
 
             # follow the trigger convention of Github
             # as long as head or tail has three asterisks, it's bold and italic
@@ -37,7 +41,7 @@ class BoldBlock(Block):
                 # ***test*** -> *test* -> pass to ItatlicBlock()
                 head_remain = max(head_asterisks_num - 2, 0)
                 tail_remain = max(tail_asterisks_num - 2, 0)
-                bold_content = '*' * head_remain + matches.group(2) + '*' * tail_remain
+                bold_content = '*' * head_remain + bold_content + '*' * tail_remain
                 return (
                     start_index,
                     end_index,
@@ -47,12 +51,13 @@ class BoldBlock(Block):
                 # match bold without italic
                 diff = head_asterisks_num - tail_asterisks_num
                 if diff >= 0:
-                    bold_content = '*' * diff + matches.group(2)
+                    bold_content = '*' * diff + bold_content
                 else:
-                    bold_content = matches.group(2) + '*' * -diff
+                    bold_content = bold_content + '*' * -diff
                 return (
                     start_index,
                     end_index,
                     BoldBlock(content=bold_content)
                 )
+
         return (-1, -1, None)

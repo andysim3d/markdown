@@ -26,7 +26,12 @@ def test_render(content, html):
         # Bold only (Otherwise from above, head and tail has at least 2 asterisks)
         ('**test**', 0, 8, 'test'),
         ('***test**', 0, 9, '*test'),
-        ('**test***', 0, 9, 'test*')
+        ('**test***', 0, 9, 'test*'),
+        # with escape match
+        ("\***test**", 2, 10, 'test'),
+        ("**\*test**", 0, 10, '\*test'),
+        ("**test\***", 0, 10, 'test\*'),
+        ("**test**\*", 0, 8, 'test'),
     ]
 )
 def test_parse(content, start, end, sub_content):
@@ -46,6 +51,11 @@ def test_parse(content, start, end, sub_content):
         ('*test**'),
         ('**test*'),
         ('*_test_*'),
+        # with escape match
+        ("\**test**"),
+        ("*\*test**"),
+        ("*test\**"),
+        ("*test*\*"),
     ]
 )
 def test_parse_not_match(content):
