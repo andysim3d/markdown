@@ -12,9 +12,7 @@ def test_render(content, url, html):
 
 
 @pytest.mark.parametrize("content, expected_html, start, end", [
-
-    ('![abc](such a url)', '<img src="such a url" alt="abc"> </img>', 0,
-     18),
+    ('![abc](such a url)', '<img src="such a url" alt="abc"> </img>', 0, 18),
     ('![abc](such a url\))', '<img src="such a url\)" alt="abc"> </img>', 0,
      20),
     ('![abc\]](such a url\))', '<img src="such a url\)" alt="abc\]"> </img>',
