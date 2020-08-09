@@ -19,7 +19,7 @@ class CodeBlock(Block):
         Parse a text content, and return (begin, end, Element) if parseable,
         or (-1, -1, None) that no such a element
         '''
-        code_pattern = r"(^`|[^\\]`)((([^\n])*)[^\\])*`"
+        code_pattern = r"(^`|[^\\]`)([^\n]*[^\\])*`"
         code_match = re.search(code_pattern, content)
         if code_match:
             start = code_match.start()
