@@ -18,8 +18,8 @@ def test_italic_render(content, html):
 ])
 def test_italic_parse(content, html):
     start, end, italic_block = ItalicBlock.parse(content)
-    assert start == 0
-    assert end == len(content)
+    assert 0 == start
+    assert len(content) == end
     assert italic_block is not None
     assert html == italic_block.render()
 
@@ -30,5 +30,5 @@ def test_italic_parse(content, html):
 ])
 def test_italic_parse_failed(content):
     start, end, italic_block = ItalicBlock.parse(content)
-    assert start == end == -1
+    assert -1 == start == end
     assert italic_block is None
