@@ -30,10 +30,10 @@ def test_link_render(content, url, html):
                           ])
 def test_link_parse(content, expected_start, html):
     start, end, link_block = LinkBlock.parse(content)
-    assert start == expected_start
-    assert end == len(content)
+    assert expected_start == start
+    assert len(content) == end
     assert link_block is not None
-    assert link_block.render() == html
+    assert html == link_block.render()
 
 
 @pytest.mark.parametrize("content", [
@@ -45,5 +45,5 @@ def test_link_parse(content, expected_start, html):
 ])
 def test_link_parse_failed(content):
     start, end, link_block = LinkBlock.parse(content)
-    assert start == end == -1
+    assert -1 == start == end
     assert link_block is None
