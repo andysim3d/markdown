@@ -32,6 +32,20 @@ def test_render(content, html):
         ("**\*test**", 0, 10, '\*test'),
         ("**test\***", 0, 10, 'test\*'),
         ("**test**\*", 0, 8, 'test'),
+        # Alternative
+        ('__test__', 0, 8, 'test'),
+        ('*_test_*', 0, 8, 'test'),
+        ('___test___', 0, 10, '*test*'),
+        ('__*test*__', 0, 10, '*test*'),
+        ('*__test__*', 0, 10, '*test*'),
+        ('**_test_**', 0, 10, '*test*'),
+        ('_**test**_', 0, 10, '*test*'),
+        # Alternative with escape match
+        ("\___test__", 2, 10, 'test'),
+        ("__\_test__", 0, 10, '\_test'),
+        ("__test\___", 0, 10, 'test\_'),
+        ("__test__\_", 0, 8, 'test'),
+
     ]
 )
 def test_parse(content, start, end, sub_content):
@@ -50,7 +64,6 @@ def test_parse(content, start, end, sub_content):
         ('*test*'),
         ('*test**'),
         ('**test*'),
-        ('*_test_*'),
         # with escape match
         ("\**test**"),
         ("*\*test**"),

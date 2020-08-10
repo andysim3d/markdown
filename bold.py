@@ -21,17 +21,17 @@ class BoldBlock(Block):
 
         Return (-1, -1, None) if no such match found.
         '''
-        pattern = r'(\\\*)*([*]+)(.*[^*\\])(\\\*)*([*]+)'
+        pattern = r'(\\\*)*(\\\_)*([*_]+)(\\\*)*(\\\_)*(.*[^*_\\])(\\\*)*(\\\_)*([*_]+)'
         matches = re.search(pattern, content)
         if matches:
-            head_asterisks_num = len(matches.group(2))
-            tail_asterisks_num = len(matches.group(5))
-            start_index = matches.start(2)
+            head_asterisks_num = len(matches.group(3))
+            tail_asterisks_num = len(matches.group(9))
+            start_index = matches.start(3)
             end_index = matches.end()
 
             bold_content = ""
-            bold_content += matches.group(3) if matches.group(3) else ""
-            bold_content += matches.group(4) if matches.group(4) else ""
+            for i in range(4, 9):
+                bold_content += matches.group(i) if matches.group(i) else ""
 
             # follow the trigger convention of Github
             # as long as head or tail has three asterisks, it's bold and italic
