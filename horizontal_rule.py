@@ -20,7 +20,7 @@ class HorizontalRule(Paragraph):
         Return (-1, -1, None) if no such match found.
         '''
         pattern = r'^ *(?:\*{3,}|-{3,}|_{3,}) *$'
-        matches = re.search(pattern, content, re.MULTILINE)
+        matches = re.search(pattern, content)
         if matches:
             return (matches.start(), matches.end(), HorizontalRule(''))
         else:
