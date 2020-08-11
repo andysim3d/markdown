@@ -22,7 +22,7 @@ class BoldBlock(Block):
         Return (-1, -1, None) if no such match found.
         '''
         pattern = \
-            r'(?:^|[^\\])(([*_]{2,})((?:\\(?:\*|_|\\))*.*[^*_\\](?:\\(?:\*|_|\\))*)([*_]{2,}))'
+            r'(?:^|[^\\])(([*_]{2,})((?:\\(?:\*|_|\\))*(?:.*[^*_\\])(?:\\(?:\*|_|\\))*)([*_]{2,}))'
         matches = re.search(pattern, content)
         if matches:
             head_asterisks_num = len(matches.group(2))

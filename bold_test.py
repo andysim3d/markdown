@@ -32,6 +32,9 @@ def test_render(content, html):
         ("**\*test**", 0, 10, '\*test'),
         ("**test\***", 0, 10, 'test\*'),
         ("**test**\*", 0, 8, 'test'),
+        (r'**\test**', 0, 9, r'\test'),
+        (r'**te\st**', 0, 9, r'te\st'),
+        (r'**test\\**', 0, 10, r'test\\'),
         # Alternative
         ('__test__', 0, 8, 'test'),
         ('*_test_*', 0, 8, 'test'),
