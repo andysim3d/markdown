@@ -19,7 +19,7 @@ class HorizontalRule(Paragraph):
         Note, the index of start and end follow the convention of [start, end)
         Return (-1, -1, None) if no such match found.
         '''
-        pattern = r'^(?:\*{3,}|-{3,}|_{3,})$'
+        pattern = r'^ *(?:\*{3,}|-{3,}|_{3,}) *$'
         matches = re.search(pattern, content, re.MULTILINE)
         if matches:
             return (matches.start(), matches.end(), HorizontalRule(''))
