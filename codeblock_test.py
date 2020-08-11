@@ -13,6 +13,7 @@ def test_render(content, html):
 
 @pytest.mark.parametrize("content, expected_html, start, end", [
     ('`code`', '<code>code</code>', 0, 6),
+    ('a`code`', '<code>code</code>', 1, 7),
     ('abc`cod\`e,`fg', '<code>cod\`e,</code>', 3, 12),
     ('``', '<code></code>', 0, 2),
 ])
@@ -25,7 +26,7 @@ def test_code_parse_success(content, expected_html, start, end):
 
 
 @pytest.mark.parametrize("content", [('`code\`'), ('`cod')])
-def test_header_parse_failed(content):
+def test_code_parse_failed(content):
     start, end, code = CodeBlock.parse(content)
     assert start == -1
     assert end == -1
