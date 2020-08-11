@@ -45,7 +45,12 @@ def test_render(content, html):
         ("__\_test__", 0, 10, '\_test'),
         ("__test\___", 0, 10, 'test\_'),
         ("__test__\_", 0, 8, 'test'),
-
+        # Double back-slash case
+        (r"**test\\***", 0, 11, r'test\\*'),
+        # Complicated escape with alternative
+        ("\*\_**\_\*test\*\_**", 4, 20, '\_\*test\*\_'),
+        ("\_\*abc**abc**", 7, 14, 'abc'),
+        (r"\*\\\_**\\\_\*test\*\_\\**", 6, 26, r'\\\_\*test\*\_\\'),
     ]
 )
 def test_parse(content, start, end, sub_content):

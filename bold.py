@@ -21,16 +21,17 @@ class BoldBlock(Block):
 
         Return (-1, -1, None) if no such match found.
         '''
-        pattern = r'(\\\*)*(\\\_)*([*_]+)(\\\*)*(\\\_)*(.*[^*_\\])(\\\*)*(\\\_)*([*_]+)'
+        pattern = \
+            r'(?:^|[^\\])(([*_]{2,})((?:\\(?:\*|_|\\))*.*[^*_\\](?:\\(?:\*|_|\\))*)([*_]{2,}))'
         matches = re.search(pattern, content)
         if matches:
-            head_asterisks_num = len(matches.group(3))
-            tail_asterisks_num = len(matches.group(9))
-            start_index = matches.start(3)
+            head_asterisks_num = len(matches.group(2))
+            tail_asterisks_num = len(matches.group(4))
+            start_index = matches.start(1)
             end_index = matches.end()
 
             bold_content = ""
-            for i in range(4, 9):
+            for i in range(3, 4):
                 bold_content += matches.group(i) if matches.group(i) else ""
 
             # follow the trigger convention of Github
