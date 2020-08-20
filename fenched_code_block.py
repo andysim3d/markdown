@@ -1,16 +1,20 @@
 import re
 from block import Block
 
-SUPPORTED_LANGUAGE = {
-    'c',
-    'c++',
-    'java',
-    'python',
-    'javascript',
-    'golang',
-    'c#',
-    'html',
-    'css',
+_SUPPORTED_LANGUAGE = {
+    "bsh", "c", "cc", "cpp", "cs", "csh", "cyc", "cv", "htm", "html", "java",
+    "js", "m", "mxml", "perl", "pl", "pm", "py", "rb", "sh", "xhtml", "xml",
+    "xsl"
+}
+
+_LANGUAGE_MAPPING = {
+    'bash': 'bsh',
+    'c++': 'cpp',
+    'c#': 'cs',
+    'javascript': 'js',
+    'python': 'py',
+    'ruby': 'rb',
+    'shell': 'sh',
 }
 
 class FenchedCodeBlock(Block):
@@ -20,14 +24,21 @@ class FenchedCodeBlock(Block):
 
         Use triple-backticks(```) to indicate a code block.
         To escape backticks in the code block, use double-backticks(``).
+
+        Support language hightlighting by using Goolge's code-prettify:
+        https://github.com/googlearchive/code-prettify
     '''
 
-    def __init__(self, content, language):
+    def __init__(self, content, language=None):
         super().__init__(content)
         self._language = language
 
     def _render(self):
-        return '<code>{}</code>'.format(self.content())
+        code_tag = '<code>{}</code>'.format(self.content())
+        if not self._language:
+            return '<pre class="prettyprint">{}</pre>'.format(code_tag)
+        else:
+            return '<pre class="prettyprint lang-{0}">{1}</pre>'.format(self._language, code_tag)
 
 
     @staticmethod
@@ -52,10 +63,12 @@ class FenchedCodeBlock(Block):
         pattern = r'^ {0,3}(`{3,}) *([^\n]*)\s+(((?:.|\n)*)\n {0,3}(`{3,})\s*(.|\n)*)$'
         matches = re.search(pattern, content, re.MULTILINE)
         if matches:
-
             language = None
-            if matches.group(2) and str(matches.group(2)).lower() in SUPPORTED_LANGUAGE:
-                language = str(matches.group(2)).lower()
+            if matches.group(2):
+                key = str(matches.group(2)).lower()
+                language = _LANGUAGE_MAPPING.get(key, key)
+                if language not in _SUPPORTED_LANGUAGE:
+                    language = None
 
             num_starting = matches.group(1)
             num_ending = matches.group(5)
