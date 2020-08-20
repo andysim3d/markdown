@@ -3,14 +3,24 @@ from fenched_code_block import FenchedCodeBlock
 
 
 @pytest.mark.parametrize(
-    "content, html",
+    "content, language, html",
     [
-        ('print(hello world)', '<code>print(hello world)</code>'),
-        ('print(hello `Andy`)', '<code>print(hello `Andy`)</code>'), # ability to escape backticks
+        # No lanugage
+        (
+            'print(hello world)',
+            None,
+            '<pre class="prettyprint"><code>print(hello world)</code></pre>'
+        ),
+        # valid language, ability to escape backticks
+        (
+            'print(hello `Andy`)',
+            'py',
+            '<pre class="prettyprint lang-py"><code>print(hello `Andy`)</code></pre>'
+        )
     ]
 )
-def test_render(content, html):
-    fcb = FenchedCodeBlock(content, None)
+def test_render(content, language, html):
+    fcb = FenchedCodeBlock(content, language)
     assert html == fcb.render()
 
 
@@ -36,7 +46,7 @@ a = b + c
 print(world)
 ```
             ''',
-            1, 50, 'python',
+            1, 50, 'py',
             'print(hello)\na = b + c\nprint(world)'
         ),
         # Invalid language(Case insensitive)
@@ -75,7 +85,7 @@ print(hello)
 print(hello)
 `````
             ''',
-            1, 26, 'c++',
+            1, 26, 'cpp',
             'print(hello)'
         ),
     ]
