@@ -19,9 +19,9 @@ class HorizontalRule(Paragraph):
         Note, the index of start and end follow the convention of [start, end)
         Return (-1, -1, None) if no such match found.
         '''
-        pattern = r'^ *(?:\*{3,}|-{3,}|_{3,}) *$'
+        pattern = r'^ *(\*{3,}|-{3,}|_{3,}) *$'
         matches = re.search(pattern, content)
         if matches:
-            return (matches.start(), matches.end(), HorizontalRule(''))
+            return (matches.start(1), matches.end(1), HorizontalRule(''))
         else:
             return (-1, -1, None)
