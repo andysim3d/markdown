@@ -18,7 +18,7 @@ class AbstractParser(object):
         if parser in self._parsers:
             self._parsers.remove(parser)
     def parse(self, content):
-        pass
+        raise NotImplementedError("AbstractParser is not implemented.")
 
 
 class ParagraphParser(AbstractParser):
@@ -26,7 +26,7 @@ class ParagraphParser(AbstractParser):
         super().__init__()
         self._paragraphs = []
 
-    def _parse(self, content):
+    def parse(self, content):
         '''
         Invoke all parsers in self._parsers to try to parse the content.
         Return unparsed part.
@@ -38,7 +38,7 @@ class ParagraphParser(AbstractParser):
             beg, en, element = parser(content)
             if beg != 0 and beg < index:
                 index, end, final_element = beg, en, element
-        if index != 0:
+        if index != 0 and index != len(content):
             self._paragraphs.append(TextParagraph(content[0, index]))
         self._paragraphs.append(final_element)
         return content[end:]
@@ -54,15 +54,4 @@ class BlockParser(AbstractParser):
         Invoke all parsers in self._parsers to try to parse the content.
         Return unparsed part.
         '''
-        index = len(content)
-        end = len(content)
-        final_element = TextParagraph(content)
-        for parser in self._parsers:
-            beg, en, element = parser(content)
-            if beg != 0 and beg < index:
-                index, end, final_element = beg, en, element
-        if index != 0:
-            self._blocks.append(TextParagraph(content[0, index]))
-        self._blocks.append(final_element)
-        return content[end:]
-
+        # TODO: implement it.
