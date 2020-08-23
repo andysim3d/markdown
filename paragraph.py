@@ -8,3 +8,6 @@ class Paragraph(Element):
         """All paragraph elements probably contains children.
         """
         return True
+
+class TextParagraph(Paragraph):
+    pass
