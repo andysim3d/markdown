@@ -17,19 +17,16 @@ class ItalicBlock(Block):
         """Parse a italic content, and return (begin, end, ItalicBlock) if parseable,
         or (-1, -1, None) that no such a element
         """
-        pattern_star = r'(^|[^\\])([*])(.*[^\\])([*])'
-        pattern_underscore = r'(^|[^\\])([_])(.*[^\\])([_])'
+        pattern_star = r'(?:^|[^\\])([*])(.*[^\\])([*])'
+        pattern_underscore = r'(?:^|[^\\])([_])(.*[^\\])([_])'
 
         match_star = re.search(pattern_star, content)
         match_underscore = re.search(pattern_underscore, content)
 
         def _parse_hanlder(match):
-            start = match.start()
-            if match.group(1):
-                # escape case
-                start += 1
+            start = match.start(1)
             end = match.end()
-            content = match.group(3)
+            content = match.group(2)
             return (start, end, ItalicBlock(content))
 
         if match_star:
