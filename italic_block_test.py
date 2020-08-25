@@ -15,7 +15,8 @@ def test_italic_render(content, html):
     ("*testing text*", 0, 14, "<em>testing text</em>"),
     ("_testing text_", 0, 14, "<em>testing text</em>"),
     ("*testing text**", 0, 15, "<em>testing text*</em>"),
-    ("*_testing text_*", 0, 16, "<em>_testing text_</em>"), # the final output is <em>testing text</em>
+    # the final output is <em>testing text</em>
+    ("*_testing text_*", 0, 16, "<em>_testing text_</em>"),
     (r"\_*testing text\_*", 2, 18, r"<em>testing text\_</em>"),
     (r"\**testing text*", 2, 16, "<em>testing text</em>"),
     (r"\**testing text*\*", 2, 16, "<em>testing text</em>"),
