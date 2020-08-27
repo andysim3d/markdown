@@ -33,15 +33,15 @@ class ParagraphParser(AbstractParser):
         Invoke all parsers in self._parsers to try to parse the content.
         Return unparsed part.
         '''
-        index = len(content)
-        end = len(content)
+        start_index = len(content)
+        end_index = len(content)
         final_element = TextParagraph(content)
         for parser in self._parsers:
-            beg, en, element = parser(content)
-            if beg != 0 and beg < index:
-                index, end, final_element = beg, en, element
-        if index != 0 and index != len(content):
-            self._paragraphs.append(TextParagraph(content[0, index]))
+            begin, end, element = parser(content)
+            if begin != 0 and begin < start_index:
+                start_index, end_index, final_element = begin, end, element
+        if start_index != 0 and start_index != len(content):
+            self._paragraphs.append(TextParagraph(content[0, start_index]))
         self._paragraphs.append(final_element)
         return content[end:]
 
