@@ -1,6 +1,7 @@
 import sys
 from paragraph import TextParagraph
 
+
 class AbstractParser(object):
     def __init__(self):
         self._parsers = set()
@@ -17,6 +18,7 @@ class AbstractParser(object):
         '''
         if parser in self._parsers:
             self._parsers.remove(parser)
+
     def parse(self, content):
         raise NotImplementedError("AbstractParser is not implemented.")
 
