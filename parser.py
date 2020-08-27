@@ -72,8 +72,11 @@ class BlockParser(AbstractParser):
 
     def parse(self, content, root=None):
         '''
-        Invoke all parsers in self._parsers to try to parse the content.
-        Return unparsed part.
+        Parse the content into ab abstract syntax tree.
+
+        If the root is not given, will create an Element serving as root node.
+
+        Return the root node.
         '''
         if root is None:
             root = Element(content)
@@ -84,3 +87,5 @@ class BlockParser(AbstractParser):
         for child in root.children():
             if not isinstance(child, TextBlock):
                 self.parse(child.content(), child)
+
+        return root
