@@ -15,6 +15,15 @@ class Element(object):
     def children(self):
         return self._children
 
+    def add_child(self, child):
+        self._children.append(child)
+
+    def set_parent(self, parent):
+        self._parent = parent
+
+    def parent(self):
+        return self._parent
+
     def inner_text(self):
         "inner text or nested elements as string format"
         return str(self._content)
