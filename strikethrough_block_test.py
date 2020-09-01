@@ -13,13 +13,13 @@ def test_strikethrough_render(content, html):
 
 @pytest.mark.parametrize("content, expected_start, expected_end, html", [
     ("~testing text~", 0, 14, "<del>testing text</del>"),
-    ("~\\~testing text~", 0, 16, "<del>\\~testing text</del>"),
+    (r"~\~testing text~", 0, 16, r"<del>\~testing text</del>"),
     ("~~testing text~~", 0, 16, "<del>testing text</del>"),
-    ("\\~~testing text~", 2, 16, "<del>testing text</del>"),
-    ("~testing text~\\~", 0, 14, "<del>testing text</del>"),
-    ("~testing text\\~~", 0, 16, "<del>testing text\\~</del>"),
-    ("\\~~~testing text~~", 2, 18, "<del>testing text</del>"),
-    ("\\~\\~~testing text~\\~", 4, 18, "<del>testing text</del>"),
+    (r"\~~testing text~", 2, 16, "<del>testing text</del>"),
+    (r"~testing text~\~", 0, 14, "<del>testing text</del>"),
+    (r"~testing text\~~", 0, 16, r"<del>testing text\~</del>"),
+    (r"\~~~testing text~~", 2, 18, "<del>testing text</del>"),
+    (r"\~\~~testing text~\~", 4, 18, "<del>testing text</del>"),
 ])
 def test_strikethrough_parse(content, expected_start, expected_end, html):
     start, end, strikethrough_block = StrikethroughBlock.parse(content)
@@ -31,12 +31,12 @@ def test_strikethrough_parse(content, expected_start, expected_end, html):
 
 @pytest.mark.parametrize("content", [
     ("~test"),
-    ("\\~test~"),
+    (r"\~test~"),
     ("~~test"),
     ("~~test~"),
-    ("~~test\\~~"),
-    ("~~test~\\~"),
-    ("\\~~test~~"),
+    (r"~~test\~~"),
+    (r"~~test~\~"),
+    (r"\~~test~~"),
     ("~~~test~~~"),
     ("~~~test")
 ])
