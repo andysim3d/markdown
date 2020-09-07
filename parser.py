@@ -46,10 +46,10 @@ class ParagraphParser(AbstractParser):
         return content[end:]
 
     def parse(self, content, root=None):
-        """ 
-        Parse content into an AST, then return the root node of the tree. 
+        """
+        Parse content into an AST, then return the root node of the tree.
 
-        If the root is not given, new root will created and returned. 
+        If the root is not given, new root will created and returned.
         """
         if root is None:
             root = Element(None)
@@ -57,10 +57,6 @@ class ParagraphParser(AbstractParser):
         while remain_content:
             remain_content = self._invoke_parsers(root, remain_content)
         return root
-
-        
-
-
 
 def link_parent_and_child(parent, child):
     child.set_parent(parent)
@@ -93,7 +89,7 @@ class BlockParser(AbstractParser):
         if root is None:
             root = Element(content)
         cur_content = content
-        while len(cur_content) > 0:
+        while cur_content:
             cur_content = self._invoke_parsers(root, cur_content)
 
         for child in root.children():
