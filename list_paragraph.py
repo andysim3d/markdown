@@ -1,34 +1,57 @@
+import re
 from paragraph import Paragraph
 
 
 class ListParagraph(Paragraph):
-    def __init__(self, content, is_ordered, is_start=None, is_end=None):
+    def __init__(self, content, is_ordered):
         super().__init__(content)
         self._is_ordered = is_ordered
-        self._is_start = is_start
-        self._is_end = is_end
 
     def render(self) -> str:
-        item = f"<li>{self.content()}</li>"
-        if self._is_start is None and self._is_end is None:
-            return item
-        elif self._is_start:
-            return f"<ol>{item}" if self._is_ordered else f"<ul>{item}"
-        elif self._is_end:
-            return f"{item}</ol>" if self._is_ordered else f"{item}</ul>"
+        return f"<li>{self.content()}</li>"
 
 
 class OrderedList(ListParagraph):
     """Line starting with number
     """
 
-    def __init__(self, content, is_start, is_end):
-        super().__init__(content, True, is_start, is_end)
+    def __init__(self, content):
+        super().__init__(content, True)
+
+    @staticmethod
+    def parse(content) -> (int, int, 'OrderedList'):
+        """Parse a list paragraph, and return (begin, end, OrderedList) if parseable,
+        or (-1, -1, None) that no such a element
+        """
+        pattern = r'^[ ]*\d\.[ ]+(.*)$'
+        matches = re.search(pattern, content)
+        if matches:
+            return (
+                matches.start(),
+                matches.end(),
+                OrderedList(
+                    matches.group(1)))
+        return (-1, -1, None)
 
 
 class UnorderedList(ListParagraph):
     """Line starting with '-', '*' or '+'
     """
 
-    def __init__(self, content, is_start, is_end):
-        super().__init__(content, False, is_start, is_end)
+    def __init__(self, content):
+        super().__init__(content, False)
+
+    @staticmethod
+    def parse(content) -> (int, int, 'UnorderedList'):
+        """Parse a list paragraph, and return (begin, end, UnorderedList) if parseable,
+        or (-1, -1, None) that no such a element
+        """
+        pattern = r'^[ ]*(?:\*|\-|\+)[ ]+(.*)$'
+        matches = re.search(pattern, content)
+        if matches:
+            return (
+                matches.start(),
+                matches.end(),
+                UnorderedList(
+                    matches.group(1)))
+        return (-1, -1, None)
