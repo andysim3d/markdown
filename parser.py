@@ -26,11 +26,8 @@ class AbstractParser(object):
 
 
 class ParagraphParser(AbstractParser):
-    def __init__(self):
-        super().__init__()
-        self._paragraphs = []
 
-    def parse(self, content):
+    def _invoke_parsers(self, parent, content):
         '''
         Invoke all parsers in self._parsers to try to parse the content.
         Return unparsed part.
@@ -43,18 +40,29 @@ class ParagraphParser(AbstractParser):
             if begin != 0 and begin < start_index:
                 start_index, end_index, final_element = begin, end, element
         if start_index != 0 and start_index != len(content):
-            self._paragraphs.append(TextParagraph(content[0, start_index]))
-        self._paragraphs.append(final_element)
+            text_paragraph = TextParagraph(content[0, start_index])
+            link_parent_and_child(parent, text_paragraph)
+        link_parent_and_child(parent, final_element)
         return content[end:]
 
+    def parse(self, content, root=None):
+        """
+        Parse content into an AST, then return the root node of the tree.
+
+        If the root is not given, new root will created and returned.
+        """
+        if root is None:
+            root = Element(None)
+        remain_content = self._invoke_parsers(root, content)
+        while remain_content:
+            remain_content = self._invoke_parsers(root, remain_content)
+        return root
 
 def link_parent_and_child(parent, child):
     child.set_parent(parent)
     parent.add_child(child)
 
 class BlockParser(AbstractParser):
-    def __init__(self):
-        super().__init__()
 
     def _invoke_parsers(self, parent, content):
         start_index = len(content)
@@ -72,7 +80,7 @@ class BlockParser(AbstractParser):
 
     def parse(self, content, root=None):
         '''
-        Parse the content into ab abstract syntax tree.
+        Parse the content into an AST.
 
         If the root is not given, will create an Element serving as root node.
 
@@ -81,7 +89,7 @@ class BlockParser(AbstractParser):
         if root is None:
             root = Element(content)
         cur_content = content
-        while len(cur_content) > 0:
+        while cur_content:
             cur_content = self._invoke_parsers(root, cur_content)
 
         for child in root.children():
