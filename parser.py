@@ -70,13 +70,13 @@ class BlockParser(AbstractParser):
         final_element = TextBlock(content)
         for parser in self._parsers:
             begin, end, element = parser(content)
-            if begin != 0 and begin < start_index:
+            if begin > 0 and begin < start_index:
                 start_index, end_index, final_element = begin, end, element
-        if start_index != 0 and start_index != len(content):
+        if start_index > 0 and start_index != len(content):
             child = TextBlock(content[0, start_index])
             link_parent_and_child(parent, child)
         link_parent_and_child(parent, final_element)
-        return content[end:]
+        return content[end_index:]
 
     def parse(self, content, root=None):
         '''
