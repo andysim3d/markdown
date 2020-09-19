@@ -18,20 +18,13 @@ class Element(object):
     def add_child(self, child):
         self._children.append(child)
 
-    def set_parent(self, parent):
-        self._parent = parent
-
+    @property
     def parent(self):
         return self._parent
 
-    def inner_text(self):
-        "inner text or nested elements as string format"
-        return str(self._content)
+    @parent.setter
+    def parent(self, parent):
+        self._parent = parent
 
     def _render(self):
         pass
-
-    def nested(self):
-        """Could this element hold other elements inside, True for yes.
-        """
-        return False
