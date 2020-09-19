@@ -7,7 +7,7 @@ class QuoteParagraph(Paragraph):
         super().__init__(content)
 
     def render(self) -> str:
-        return "<blockquote>{}</blockquote>".format(self.inner_text())
+        return "<blockquote>{}</blockquote>".format(self.content())
 
     @staticmethod
     def parse(content) -> (int, int, 'QuoteParagraph'):

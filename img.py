@@ -6,7 +6,7 @@ class ImgBlock(Block):
         super().__init__(content)
         self._url = url
     def render(self) -> str:
-        return '<img src="{}" alt="{}"> </img>'.format(self._url, self.inner_text())
+        return '<img src="{}" alt="{}"> </img>'.format(self._url, self.content())
 
     @staticmethod
     def parse(content):
