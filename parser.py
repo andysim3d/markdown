@@ -4,9 +4,31 @@ from paragraph import TextParagraph
 from block import TextBlock
 
 
+from header import Header
+from horizontal_rule import HorizontalRule
+from list_paragraph import ListParagraph
+from quote import QuoteParagraph
+
+from bold import BoldBlock
+from italic_block import ItalicBlock
+from img import ImgBlock
+from link_block import LinkBlock
+from codeblock import CodeBlock
+from fenched_code_block import FenchedCodeBlock
+from strikethrough_block import StrikethroughBlock
+
+
 class AbstractParser(object):
     def __init__(self):
         self._parsers = set()
+
+    @property
+    def parsers(self):
+        return self._parsers
+
+    @parsers.setter
+    def parsers(self, new_parsers):
+        self._parsers = new_parsers
 
     def register_parser(self, parser):
         '''
@@ -52,7 +74,7 @@ class ParagraphParser(AbstractParser):
         If the root is not given, new root will created and returned.
         """
         if root is None:
-            root = Element(None)
+            root = Element(content)
         remain_content = self._invoke_parsers(root, content)
         while remain_content:
             remain_content = self._invoke_parsers(root, remain_content)
@@ -97,3 +119,45 @@ class BlockParser(AbstractParser):
                 self.parse(child.content(), child)
 
         return root
+
+def create_paragrah_and_block_parsers():
+    paragraph_elements = [
+        Header,
+        HorizontalRule,
+        ListParagraph,
+        QuoteParagraph,
+    ]
+    paragraph_functors = []
+    for element in paragraph_elements:
+        parser = element.parse
+        paragraph_functors.append(parser)
+
+    block_elements = [
+        BoldBlock,
+        ItalicBlock,
+        ImgBlock,
+        LinkBlock,
+        CodeBlock,
+        FenchedCodeBlock,
+        StrikethroughBlock,
+    ]
+    block_functors = []
+    for element in block_elements:
+        parser = element.parse
+        block_functors.append(parser)
+
+    p_parser = ParagraphParser()
+    p_parser.parsers = paragraph_functors
+    b_parser = BlockParser()
+    b_parser.parsers = block_functors
+
+    return (p_parser, b_parser)
+
+def parse_md_to_ast(md_content):
+    p_parser, b_parser = create_paragrah_and_block_parsers()
+
+    root = p_parser.parse(md_content)
+    for child in root.children():
+        b_parser.parse(child.content, child)
+
+    return root
