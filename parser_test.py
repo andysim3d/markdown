@@ -12,7 +12,7 @@ from strikethrough_block import StrikethroughBlock
 
 from header import Header
 from horizontal_rule import HorizontalRule
-from list_paragraph import ListParagraph
+from list_paragraph import OrderedList, UnorderedList
 from quote import QuoteParagraph
 
 @pytest.fixture(scope="module")
@@ -20,7 +20,8 @@ def create_paragraph_parsers():
     PARAGRAPH_ELEMENTS = [
         Header,
         HorizontalRule,
-        ListParagraph,
+        OrderedList,
+        UnorderedList,
         QuoteParagraph
     ]
     parsers = []
@@ -33,8 +34,8 @@ def create_paragraph_parsers():
 @pytest.mark.parametrize("content, expected", [
     ("# Test", [Header("Test")]),
     ("Test\n----\nTest", [TextBlock("Test"), HorizontalRule("----"), TextBlock("Test")]),
-    ("# Title\n1. List1\n2. List2\n>content", [Header("Title"), ListParagraph("List1"), \
-                                                ListParagraph("List2"), QuoteParagraph("content")]),
+    ("# Title\n1. List1\n2. List2\n>content", [Header("Title"), OrderedList("List1"), \
+                                                OrderedList("List2"), QuoteParagraph("content")]),
 ])
 def test_paragraph_parser(create_paragraph_parsers, content, expected):
     parsers = create_paragraph_parsers
