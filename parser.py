@@ -115,12 +115,18 @@ class BlockParser(AbstractParser):
             cur_content = self._invoke_parsers(root, cur_content)
 
         for child in root.children():
-            if not isinstance(child, TextBlock):
-                self.parse(child.content(), child)
+            if child.nested():
+                if not isinstance(child, TextBlock):
+                    self.parse(child.content(), child)
+            else:
+                child.add_child(TextBlock(child.content()))
 
         return root
 
 def create_paragrah_and_block_parsers():
+    p_parser = ParagraphParser()
+    b_parser = BlockParser()
+
     paragraph_elements = [
         Header,
         HorizontalRule,
@@ -130,7 +136,7 @@ def create_paragrah_and_block_parsers():
     paragraph_functors = []
     for element in paragraph_elements:
         parser = element.parse
-        paragraph_functors.append(parser)
+        p_parser.parsers.append(parser)
 
     block_elements = [
         BoldBlock,
@@ -144,12 +150,7 @@ def create_paragrah_and_block_parsers():
     block_functors = []
     for element in block_elements:
         parser = element.parse
-        block_functors.append(parser)
-
-    p_parser = ParagraphParser()
-    p_parser.parsers = paragraph_functors
-    b_parser = BlockParser()
-    b_parser.parsers = block_functors
+        b_parser.parsers.append(parser)
 
     return (p_parser, b_parser)
 

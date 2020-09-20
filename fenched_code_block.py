@@ -33,6 +33,10 @@ class FenchedCodeBlock(Block):
         super().__init__(content)
         self._language = language
 
+    def nested(self):
+        '''Fenched Code Block should not hold child except TextBlock '''
+        return False
+
     def _render(self):
         code_tag = '<code>{}</code>'.format(self.content())
         if not self._language:

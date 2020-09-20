@@ -10,6 +10,10 @@ class CodeBlock(Block):
 
         Use backticks(`) to indicate a code block.
     '''
+    def nested(self):
+        ''' Code Block should not hold child except TextBlock '''
+        return False
+
     def _render(self):
         return '<code>{}</code>'.format(self.content())
 
