@@ -23,8 +23,8 @@ class OrderedList(ListParagraph):
         """Parse a list paragraph, and return (begin, end, OrderedList) if parseable,
         or (-1, -1, None) that no such a element
         """
-        pattern = r'^[ ]*\d\.[ ]+(.*)$'
-        matches = re.search(pattern, content)
+        pattern = r'^[ ]*\d\.[ ]+(.*)$\n*'
+        matches = re.search(pattern, content, re.MULTILINE)
         if matches:
             return (
                 matches.start(),
@@ -46,8 +46,8 @@ class UnorderedList(ListParagraph):
         """Parse a list paragraph, and return (begin, end, UnorderedList) if parseable,
         or (-1, -1, None) that no such a element
         """
-        pattern = r'^[ ]*(?:\*|\-|\+)[ ]+(.*)$'
-        matches = re.search(pattern, content)
+        pattern = r'^[ ]*(?:\*|\-|\+)[ ]+(.*)$\n*'
+        matches = re.search(pattern, content, re.MULTILINE)
         if matches:
             return (
                 matches.start(),

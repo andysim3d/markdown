@@ -6,20 +6,28 @@ from block import TextBlock
 
 class AbstractParser(object):
     def __init__(self):
-        self._parsers = set()
+        self._parsers = dict()
+
+    @property
+    def parsers(self):
+        return list(self._parsers)
+
+    @parsers.setter
+    def parsers(self, new_parsers):
+        self._parsers = new_parsers
 
     def register_parser(self, parser):
         '''
         Register a paragraph parser to self._parsers
         '''
-        self._parsers.add(parser)
+        self._parsers[parser] = 0
 
     def unregister_parser(self, parser):
         '''
         Remove a registered parser
         '''
-        if parser in self._parsers:
-            self._parsers.remove(parser)
+        if parser in self._parsers.keys():
+            del self._parsers[parser]
 
     def parse(self, content):
         raise NotImplementedError("AbstractParser is not implemented.")
@@ -40,7 +48,7 @@ class ParagraphParser(AbstractParser):
             if begin != -1 and begin < start_index:
                 start_index, end_index, final_element = begin, end, element
         if start_index > 0 and start_index != len(content):
-            text_paragraph = TextParagraph(content[0, start_index])
+            text_paragraph = TextParagraph(content[:start_index])
             link_parent_and_child(parent, text_paragraph)
         link_parent_and_child(parent, final_element)
         return content[end_index:]
@@ -58,9 +66,11 @@ class ParagraphParser(AbstractParser):
             remain_content = self._invoke_parsers(root, remain_content)
         return root
 
+
 def link_parent_and_child(parent, child):
     child.set_parent(parent)
     parent.add_child(child)
+
 
 class BlockParser(AbstractParser):
 
@@ -73,7 +83,7 @@ class BlockParser(AbstractParser):
             if begin != -1 and begin < start_index:
                 start_index, end_index, final_element = begin, end, element
         if start_index > 0 and start_index != len(content):
-            child = TextBlock(content[0, start_index])
+            child = TextBlock(content[:start_index])
             link_parent_and_child(parent, child)
         link_parent_and_child(parent, final_element)
         return content[end_index:]
