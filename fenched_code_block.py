@@ -1,5 +1,5 @@
 import re
-from block import Block
+from paragraph import Paragraph
 
 _SUPPORTED_LANGUAGE = {
     "bsh", "c", "cc", "cpp", "cs", "csh", "cyc", "cv", "htm", "html", "java",
@@ -17,7 +17,7 @@ _LANGUAGE_MAPPING = {
     'shell': 'sh',
 }
 
-class FenchedCodeBlock(Block):
+class FenchedCodeBlock(Paragraph):
     '''
         https://www.markdownguide.org/extended-syntax/#fenced-code-blocks
         https://www.markdownguide.org/basic-syntax/#escaping-backticks

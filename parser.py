@@ -132,6 +132,7 @@ def create_paragrah_and_block_parsers():
         HorizontalRule,
         ListParagraph,
         QuoteParagraph,
+        FenchedCodeBlock
     ]
     paragraph_functors = []
     for element in paragraph_elements:
@@ -144,7 +145,6 @@ def create_paragrah_and_block_parsers():
         ImgBlock,
         LinkBlock,
         CodeBlock,
-        FenchedCodeBlock,
         StrikethroughBlock,
     ]
     block_functors = []
