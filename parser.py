@@ -37,7 +37,7 @@ class ParagraphParser(AbstractParser):
         final_element = TextParagraph(content)
         for parser in self._parsers:
             begin, end, element = parser(content)
-            if begin != 0 and begin < start_index:
+            if begin != -1 and begin < start_index:
                 start_index, end_index, final_element = begin, end, element
         if start_index != 0 and start_index != len(content):
             text_paragraph = TextParagraph(content[0, start_index])
@@ -70,7 +70,7 @@ class BlockParser(AbstractParser):
         final_element = TextBlock(content)
         for parser in self._parsers:
             begin, end, element = parser(content)
-            if begin != 0 and begin < start_index:
+            if begin != -1 and begin < start_index:
                 start_index, end_index, final_element = begin, end, element
         if start_index != 0 and start_index != len(content):
             child = TextBlock(content[0, start_index])
