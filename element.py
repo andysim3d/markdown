@@ -28,3 +28,8 @@ class Element(object):
 
     def _render(self):
         pass
+
+    def nested(self):
+        """Could this element hold other elements inside, True for yes.
+        """
+        return True
