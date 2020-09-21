@@ -1,7 +1,18 @@
 import sys
 
-from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, HorizontalRule, ListParagraph, QuoteParagraph, BoldBlock, ItalicBlock, ImgBlock, LinkBlock, CodeBlock, FenchedCodeBlock, StrikethroughBlock
+from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, HorizontalRule, ListParagraph, QuoteParagraph, BoldBlock, ItalicBlock, ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock
 
+from .bold_parser import parse_bold_block
+from .codeblock_parser import parse_code_block
+from .fenced_code_block_parser import parse_fenced_code_block
+from .header_parser import parse_header_paragraph
+from .horizontal_rule_parser import parse_horiontal_rule
+from .img_parser import parse_img_block
+from .italic_block_parser import parse_italic_block
+from .link_block_parser import parse_link_block
+from .list_paragraph_parser import parse_ordered_list, parse_unordered_list
+from .quote_parser import parse_quote
+from .strikethrough_block_parser import parse_strike_through_block
 
 class AbstractParser(object):
     def __init__(self):
@@ -113,26 +124,27 @@ def create_paragrah_and_block_parsers():
     p_parser = ParagraphParser()
     b_parser = BlockParser()
 
-    paragraph_elements = [
-        HeaderParagraph, HorizontalRule, ListParagraph, QuoteParagraph, FenchedCodeBlock
+    paragraph_functors = [
+        parse_header_paragraph,
+        parse_horiontal_rule, 
+        parse_ordered_list, 
+        parse_unordered_list,
+        parse_quote,
+        parse_fenced_code_block
     ]
-    paragraph_functors = []
-    for element in paragraph_elements:
-        parser = element.parse
-        p_parser.parsers.append(parser)
+    for parser_functor in paragraph_functors:
+        p_parser.parsers.append(parser_functor)
 
-    block_elements = [
-        BoldBlock,
-        ItalicBlock,
-        ImgBlock,
-        LinkBlock,
-        CodeBlock,
-        StrikethroughBlock,
+    block_element_functors = [
+        parse_bold_block,
+        parse_italic_block,
+        parse_img_block,
+        parse_link_block,
+        parse_code_block,
+        parse_strike_through_block,
     ]
-    block_functors = []
-    for element in block_elements:
-        parser = element.parse
-        b_parser.parsers.append(parser)
+    for parser_functor in block_element_functors:
+        b_parser.parsers.append(parser_functor)
 
     return (p_parser, b_parser)
 
