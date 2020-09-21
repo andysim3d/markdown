@@ -1,6 +1,8 @@
 import sys
 
-from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, HorizontalRule, ListParagraph, QuoteParagraph, BoldBlock, ItalicBlock, ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock
+from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
+    HorizontalRule, ListParagraph, QuoteParagraph, BoldBlock, ItalicBlock, \
+        ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock
 
 from .bold_parser import parse_bold_block
 from .codeblock_parser import parse_code_block
