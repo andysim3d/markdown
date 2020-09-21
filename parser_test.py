@@ -1,7 +1,8 @@
 # pylint: skip-file
 import pytest
 
-from parser import ParagraphParser, BlockParser
+from parser import ParagraphParser, BlockParser,\
+    create_paragraph_parsers, create_block_parsers
 from block import TextBlock
 from bold import BoldBlock
 from italic_block import ItalicBlock
@@ -18,38 +19,17 @@ from list_paragraph import OrderedList, UnorderedList
 from quote import QuoteParagraph
 
 
-@pytest.fixture(scope="module")
-def create_paragraph_parsers():
-    PARAGRAPH_ELEMENTS = [
-        Header,
-        HorizontalRule,
-        OrderedList,
-        UnorderedList,
-        QuoteParagraph
-    ]
-    parsers = []
-    for element in PARAGRAPH_ELEMENTS:
-        parser = element.parse
-        parsers.append(parser)
-
-    return parsers
-
-
 @pytest.mark.parametrize("content, expected", [
     ("# Test", [Header("Test")]),
     (r"""Test
 ----
-Test""", [TextParagraph("Test"), HorizontalRule("----"), TextParagraph("Test")]),
+Test""", [TextParagraph("Test\n"), HorizontalRule(""), TextParagraph("\nTest")]),
     (r"""1. List1
 2. List2
 >content""", [OrderedList("List1"), OrderedList("List2"), QuoteParagraph("content")]),
 ])
-def test_paragraph_parser(create_paragraph_parsers, content, expected):
-    parsers = create_paragraph_parsers
-    paragraph_parser = ParagraphParser()
-    for p in parsers:
-        paragraph_parser.register_parser(p)
-
+def test_paragraph_parser(content, expected):
+    paragraph_parser = create_paragraph_parsers()
     root = paragraph_parser.parse(content)
     children = root.children()
     assert len(expected) == len(children)
@@ -57,37 +37,13 @@ def test_paragraph_parser(create_paragraph_parsers, content, expected):
         assert isinstance(expected[i], type(children[i]))
         assert expected[i].content() == children[i].content()
 
-
-@pytest.fixture(scope="module")
-def create_block_parsers():
-    BLOCK_ELEMENTS = [
-        BoldBlock,
-        ItalicBlock,
-        ImgBlock,
-        LinkBlock,
-        CodeBlock,
-        FenchedCodeBlock,
-        StrikethroughBlock
-    ]
-    parsers = []
-    for element in BLOCK_ELEMENTS:
-        parser = element.parse
-        parsers.append(parser)
-
-    return parsers
-
-
 @pytest.mark.parametrize("content, expected", [
     ("testing", [TextBlock("testing")]),
     ("![test](testurl)", [ImgBlock("test", "testurl")]),
     ("*testing*[test](testurl)", [ItalicBlock("testing"), LinkBlock("test", "testurl")]),
 ])
-def test_block_parser(create_block_parsers, content, expected):
-    parsers = create_block_parsers
-    block_parser = BlockParser()
-    for p in parsers:
-        block_parser.register_parser(p)
-
+def test_block_parser(content, expected):
+    block_parser = create_block_parsers()
     root = block_parser.parse(content)
     children = root.children()
     assert len(expected) == len(children)
@@ -95,13 +51,8 @@ def test_block_parser(create_block_parsers, content, expected):
         assert isinstance(expected[i], type(children[i]))
         assert expected[i].content() == children[i].content()
 
-
-def test_nested_block_parser(create_block_parsers):
-    parsers = create_block_parsers
-    block_parser = BlockParser()
-    for p in parsers:
-        block_parser.register_parser(p)
-
+def test_nested_block_parser():
+    block_parser = create_block_parsers()
     content = "***abc***"
     expected = {
         1: BoldBlock("*abc*"),

@@ -5,6 +5,11 @@ class HorizontalRule(Paragraph):
     '''
         https://www.markdownguide.org/basic-syntax/#horizontal-rules
     '''
+
+    def nested(self):
+        ''' Horizontal Rule has no child '''
+        return False
+
     def _render(self):
         return '<hr>'
 
@@ -19,8 +24,8 @@ class HorizontalRule(Paragraph):
         Note, the index of start and end follow the convention of [start, end)
         Return (-1, -1, None) if no such match found.
         '''
-        pattern = r'^ *(\*{3,}|-{3,}|_{3,}) *$'
-        matches = re.search(pattern, content)
+        pattern = r'^\s*(\*{3,}|-{3,}|_{3,})\s*$'
+        matches = re.search(pattern, content, re.MULTILINE)
         if matches:
             return (matches.start(1), matches.end(1), HorizontalRule(''))
         else:

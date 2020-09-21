@@ -28,10 +28,10 @@ def test_render(content, html):
         ('***test**', 0, 9, '*test'),
         ('**test***', 0, 9, 'test*'),
         # with escape match
-        ("\***test**", 2, 10, 'test'),
-        ("**\*test**", 0, 10, '\*test'),
-        ("**test\***", 0, 10, 'test\*'),
-        ("**test**\*", 0, 8, 'test'),
+        (r"\***test**", 2, 10, 'test'),
+        (r"**\*test**", 0, 10, r'\*test'),
+        (r"**test\***", 0, 10, r'test\*'),
+        (r"**test**\*", 0, 8, 'test'),
         (r'**\test**', 0, 9, r'\test'),
         (r'**te\st**', 0, 9, r'te\st'),
         (r'**test\\**', 0, 10, r'test\\'),
@@ -44,15 +44,15 @@ def test_render(content, html):
         ('**_test_**', 0, 10, '*test*'),
         ('_**test**_', 0, 10, '*test*'),
         # Alternative with escape match
-        ("\___test__", 2, 10, 'test'),
-        ("__\_test__", 0, 10, '\_test'),
-        ("__test\___", 0, 10, 'test\_'),
-        ("__test__\_", 0, 8, 'test'),
+        (r"\___test__", 2, 10, 'test'),
+        (r"__\_test__", 0, 10, r'\_test'),
+        (r"__test\___", 0, 10, r'test\_'),
+        (r"__test__\_", 0, 8, 'test'),
         # Double back-slash case
         (r"**test\\***", 0, 11, r'test\\*'),
         # Complicated escape with alternative
-        ("\*\_**\_\*test\*\_**", 4, 20, '\_\*test\*\_'),
-        ("\_\*abc**abc**", 7, 14, 'abc'),
+        (r"\*\_**\_\*test\*\_**", 4, 20, r'\_\*test\*\_'),
+        (r"\_\*abc**abc**", 7, 14, 'abc'),
         (r"\*\\\_**\\\_\*test\*\_\\**", 6, 26, r'\\\_\*test\*\_\\'),
     ]
 )
@@ -73,10 +73,10 @@ def test_parse(content, start, end, sub_content):
         ('*test**'),
         ('**test*'),
         # with escape match
-        ("\**test**"),
-        ("*\*test**"),
-        ("*test\**"),
-        ("*test*\*"),
+        (r"\**test**"),
+        (r"*\*test**"),
+        (r"*test\**"),
+        (r"*test*\*"),
     ]
 )
 def test_parse_not_match(content):

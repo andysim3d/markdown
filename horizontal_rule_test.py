@@ -14,6 +14,12 @@ def test_render():
         ('-----', 0, 5),
         (' ------', 1, 7),
         ('______ ', 0, 6),
+        ('''
+
+
+-----
+
+''', 3, 8)
     ]
 )
 def test_parse(content, start, end):
@@ -29,7 +35,7 @@ def test_parse(content, start, end):
         # not match
         ('**'),
         ('*_-'),
-        ('\---'),
+        (r'\---'),
         ('a___'),
         ('*****a'),
         ('***a**'),
