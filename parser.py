@@ -1,8 +1,8 @@
-import sys
+from collections import OrderedDict
+
 from element import Element
 from paragraph import TextParagraph
 from block import TextBlock
-
 
 from header import Header
 from horizontal_rule import HorizontalRule
@@ -20,11 +20,11 @@ from strikethrough_block import StrikethroughBlock
 
 class AbstractParser(object):
     def __init__(self):
-        self._parsers = dict()
+        self._parsers = OrderedDict()
 
     @property
     def parsers(self):
-        return list(self._parsers)
+        return self.parsers
 
     @parsers.setter
     def parsers(self, new_parsers):
@@ -40,7 +40,7 @@ class AbstractParser(object):
         '''
         Remove a registered parser
         '''
-        if parser in self._parsers.keys():
+        if parser in self._parsers:
             del self._parsers[parser]
 
     def parse(self, content):
