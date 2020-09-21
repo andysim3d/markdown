@@ -24,7 +24,7 @@ class AbstractParser(object):
 
     @property
     def parsers(self):
-        return self.parsers
+        return self._parsers
 
     @parsers.setter
     def parsers(self, new_parsers):
