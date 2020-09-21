@@ -14,7 +14,6 @@ class ListParagraph(Paragraph):
 class OrderedList(ListParagraph):
     """Line starting with number
     """
-
     def __init__(self, content):
         super().__init__(content, True)
 
@@ -22,6 +21,5 @@ class OrderedList(ListParagraph):
 class UnorderedList(ListParagraph):
     """Line starting with '-', '*' or '+'
     """
-
     def __init__(self, content):
         super().__init__(content, False)

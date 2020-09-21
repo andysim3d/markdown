@@ -42,8 +42,7 @@ from ..bold_parser import parse_bold_block
         (r"\*\_**\_\*test\*\_**", 4, 20, r'\_\*test\*\_'),
         (r"\_\*abc**abc**", 7, 14, 'abc'),
         (r"\*\\\_**\\\_\*test\*\_\\**", 6, 26, r'\\\_\*test\*\_\\'),
-    ]
-)
+    ])
 def test_parse(content, start, end, sub_content):
     (start_index, end_index, bold_block) = parse_bold_block(content)
     assert start_index == start
@@ -65,8 +64,7 @@ def test_parse(content, start, end, sub_content):
         (r"*\*test**"),
         (r"*test\**"),
         (r"*test*\*"),
-    ]
-)
+    ])
 def test_parse_not_match(content):
     (start_index, end_index, bold_block) = parse_bold_block(content)
     assert start_index == -1

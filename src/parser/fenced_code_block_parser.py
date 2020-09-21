@@ -17,6 +17,7 @@ _LANGUAGE_MAPPING = {
     'shell': 'sh',
 }
 
+
 def parse_fenced_code_block(content):
     '''
     Input: a text content
@@ -48,16 +49,10 @@ def parse_fenced_code_block(content):
         num_starting = matches.group(1)
         num_ending = matches.group(5)
         if num_starting > num_ending:
-            return (
-                matches.start(1),
-                matches.end(3),
-                FencedCodeBlock(matches.group(3), language)
-            )
+            return (matches.start(1), matches.end(3),
+                    FencedCodeBlock(matches.group(3), language))
         else:
-            return (
-                matches.start(1),
-                matches.end(5),
-                FencedCodeBlock(matches.group(4), language)
-            )
+            return (matches.start(1), matches.end(5),
+                    FencedCodeBlock(matches.group(4), language))
     else:
         return (-1, -1, None)

@@ -36,11 +36,7 @@ def parse_bold_block(content):
             head_remain = max(head_asterisks_num - 2, 0)
             tail_remain = max(tail_asterisks_num - 2, 0)
             bold_content = '*' * head_remain + bold_content + '*' * tail_remain
-            return (
-                start_index,
-                end_index,
-                BoldBlock(content=bold_content)
-            )
+            return (start_index, end_index, BoldBlock(content=bold_content))
         elif head_asterisks_num >= 2 and tail_asterisks_num >= 2:
             # match bold without italic
             diff = head_asterisks_num - tail_asterisks_num
@@ -48,10 +44,6 @@ def parse_bold_block(content):
                 bold_content = '*' * diff + bold_content
             else:
                 bold_content = bold_content + '*' * -diff
-            return (
-                start_index,
-                end_index,
-                BoldBlock(content=bold_content)
-            )
+            return (start_index, end_index, BoldBlock(content=bold_content))
 
     return (-1, -1, None)

@@ -1,6 +1,7 @@
 import re
 from ..blocks import QuoteParagraph
 
+
 def parse_quote(content) -> (int, int, 'QuoteParagraph'):
     """Parse a quote content, and return (begin, end, QuoteParagraph) if parseable,
     or (-1, -1, None) that no such a element

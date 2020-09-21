@@ -1,6 +1,7 @@
 import re
 from ..blocks import StrikethroughBlock
 
+
 def parse_strike_through_block(content) -> (int, int, 'StrikethroughBlock'):
     """Parse a strikethrough content, and return (begin, end, StrikethroughBlock) if parseable,
     or (-1, -1, None) that no such a element.
@@ -22,8 +23,7 @@ def parse_strike_through_block(content) -> (int, int, 'StrikethroughBlock'):
                     start += 1
                 end = wave_match.end()
                 content = wave_match.group(3)
-                content += wave_match.group(
-                    4) if wave_match.group(4) else ""
+                content += wave_match.group(4) if wave_match.group(4) else ""
                 return (start, end, StrikethroughBlock(content))
         # else: call Code
 

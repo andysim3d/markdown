@@ -1,6 +1,7 @@
 import pytest
 from ..codeblock_parser import parse_code_block
 
+
 @pytest.mark.parametrize("content, expected_html, start, end", [
     ('`code`', '<code>code</code>', 0, 6),
     ('a`code`', '<code>code</code>', 1, 7),

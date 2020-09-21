@@ -2,6 +2,7 @@ import re
 import typing
 from .paragraph import Paragraph
 
+
 class HeaderParagraph(Paragraph):
     def __init__(self, content, level=1):
         super().__init__(content)

@@ -5,7 +5,6 @@ from .block import Block
 class StrikethroughBlock(Block):
     """Element wrapped by '~'
     """
-
     def __init__(self, content):
         super().__init__(content)
 

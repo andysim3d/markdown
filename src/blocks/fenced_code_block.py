@@ -1,6 +1,7 @@
 import re
 from .paragraph import Paragraph
 
+
 class FencedCodeBlock(Paragraph):
     '''
         https://www.markdownguide.org/extended-syntax/#fenced-code-blocks
@@ -12,7 +13,6 @@ class FencedCodeBlock(Paragraph):
         Support language hightlighting by using Goolge's code-prettify:
         https://github.com/googlearchive/code-prettify
     '''
-
     def __init__(self, content, language=None):
         super().__init__(content)
         self._language = language
@@ -26,4 +26,5 @@ class FencedCodeBlock(Paragraph):
         if not self._language:
             return '<pre class="prettyprint">{}</pre>'.format(code_tag)
         else:
-            return '<pre class="prettyprint lang-{0}">{1}</pre>'.format(self._language, code_tag)
+            return '<pre class="prettyprint lang-{0}">{1}</pre>'.format(
+                self._language, code_tag)

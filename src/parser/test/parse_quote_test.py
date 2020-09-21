@@ -1,6 +1,7 @@
 import pytest
 from ..quote_parser import parse_quote
 
+
 @pytest.mark.parametrize("content, html",
                          [(r"> test", r"<blockquote>test</blockquote>"),
                           (r"  >test", r"<blockquote>test</blockquote>"),
@@ -11,6 +12,7 @@ def test_quote_parse(content, html):
     assert start == 0
     assert quote_para is not None
     assert html == quote_para.render()
+
 
 @pytest.mark.parametrize("content", [
     (r"\\> a"),

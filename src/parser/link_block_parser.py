@@ -1,6 +1,7 @@
 import re
 from ..blocks import LinkBlock
 
+
 def parse_link_block(content) -> (int, int, 'LinkBlock'):
     """Parse a link content, and return (begin, end, LinkBlock) if parseable,
     or (-1, -1, None) that no such a element

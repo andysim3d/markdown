@@ -14,6 +14,7 @@ from .list_paragraph_parser import parse_ordered_list, parse_unordered_list
 from .quote_parser import parse_quote
 from .strikethrough_block_parser import parse_strike_through_block
 
+
 class AbstractParser(object):
     def __init__(self):
         self._parsers = set()
@@ -125,12 +126,8 @@ def create_paragrah_and_block_parsers():
     b_parser = BlockParser()
 
     paragraph_functors = [
-        parse_header_paragraph,
-        parse_horiontal_rule, 
-        parse_ordered_list, 
-        parse_unordered_list,
-        parse_quote,
-        parse_fenced_code_block
+        parse_header_paragraph, parse_horiontal_rule, parse_ordered_list,
+        parse_unordered_list, parse_quote, parse_fenced_code_block
     ]
     for parser_functor in paragraph_functors:
         p_parser.parsers.append(parser_functor)

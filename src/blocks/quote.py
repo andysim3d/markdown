@@ -1,5 +1,7 @@
 import re
 from .paragraph import Paragraph
+
+
 class QuoteParagraph(Paragraph):
     """Element decorated by '>'.
     """

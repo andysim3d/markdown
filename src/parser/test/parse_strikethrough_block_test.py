@@ -20,17 +20,10 @@ def test_strikethrough_parse(content, expected_start, expected_end, html):
     assert html == strikethrough_block.render()
 
 
-@pytest.mark.parametrize("content", [
-    ("~test"),
-    (r"\~test~"),
-    ("~~test"),
-    ("~~test~"),
-    (r"~~test\~~"),
-    (r"~~test~\~"),
-    (r"\~~test~~"),
-    ("~~~test~~~"),
-    ("~~~test")
-])
+@pytest.mark.parametrize("content", [("~test"), (r"\~test~"), ("~~test"),
+                                     ("~~test~"), (r"~~test\~~"),
+                                     (r"~~test~\~"), (r"\~~test~~"),
+                                     ("~~~test~~~"), ("~~~test")])
 def test_strikethrough_parse_failed(content):
     start, end, strikethrough_block = parse_strike_through_block(content)
     assert -1 == start == end

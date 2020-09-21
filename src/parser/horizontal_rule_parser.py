@@ -1,6 +1,7 @@
 import re
 from ..blocks import HorizontalRule
 
+
 def parse_horiontal_rule(content):
     '''
     Input: a text content
