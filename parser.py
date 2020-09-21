@@ -1,12 +1,12 @@
-import sys
+from collections import OrderedDict
+
 from element import Element
 from paragraph import TextParagraph
 from block import TextBlock
 
-
 from header import Header
 from horizontal_rule import HorizontalRule
-from list_paragraph import ListParagraph
+from list_paragraph import OrderedList, UnorderedList
 from quote import QuoteParagraph
 
 from bold import BoldBlock
@@ -20,7 +20,7 @@ from strikethrough_block import StrikethroughBlock
 
 class AbstractParser(object):
     def __init__(self):
-        self._parsers = set()
+        self._parsers = OrderedDict()
 
     @property
     def parsers(self):
@@ -34,14 +34,14 @@ class AbstractParser(object):
         '''
         Register a paragraph parser to self._parsers
         '''
-        self._parsers.add(parser)
+        self._parsers[parser] = 0
 
     def unregister_parser(self, parser):
         '''
         Remove a registered parser
         '''
         if parser in self._parsers:
-            self._parsers.remove(parser)
+            del self._parsers[parser]
 
     def parse(self, content):
         raise NotImplementedError("AbstractParser is not implemented.")
@@ -59,13 +59,13 @@ class ParagraphParser(AbstractParser):
         final_element = TextParagraph(content)
         for parser in self._parsers:
             begin, end, element = parser(content)
-            if begin != 0 and begin < start_index:
+            if begin != -1 and begin < start_index:
                 start_index, end_index, final_element = begin, end, element
-        if start_index != 0 and start_index != len(content):
-            text_paragraph = TextParagraph(content[0, start_index])
+        if start_index > 0 and start_index != len(content):
+            text_paragraph = TextParagraph(content[:start_index])
             link_parent_and_child(parent, text_paragraph)
         link_parent_and_child(parent, final_element)
-        return content[end:]
+        return content[end_index:]
 
     def parse(self, content, root=None):
         """
@@ -80,9 +80,11 @@ class ParagraphParser(AbstractParser):
             remain_content = self._invoke_parsers(root, remain_content)
         return root
 
+
 def link_parent_and_child(parent, child):
-    child.set_parent(parent)
+    child.parent = parent
     parent.add_child(child)
+
 
 class BlockParser(AbstractParser):
 
@@ -92,13 +94,13 @@ class BlockParser(AbstractParser):
         final_element = TextBlock(content)
         for parser in self._parsers:
             begin, end, element = parser(content)
-            if begin != 0 and begin < start_index:
+            if begin != -1 and begin < start_index:
                 start_index, end_index, final_element = begin, end, element
-        if start_index != 0 and start_index != len(content):
-            child = TextBlock(content[0, start_index])
+        if start_index > 0 and start_index != len(content):
+            child = TextBlock(content[:start_index])
             link_parent_and_child(parent, child)
         link_parent_and_child(parent, final_element)
-        return content[end:]
+        return content[end_index:]
 
     def parse(self, content, root=None):
         '''
@@ -123,22 +125,30 @@ class BlockParser(AbstractParser):
 
         return root
 
-def create_paragrah_and_block_parsers():
-    p_parser = ParagraphParser()
-    b_parser = BlockParser()
 
+def create_paragraph_parsers():
+    p_parser = ParagraphParser()
     paragraph_elements = [
         Header,
         HorizontalRule,
-        ListParagraph,
+        OrderedList,
+        UnorderedList,
         QuoteParagraph,
         FenchedCodeBlock
     ]
     paragraph_functors = []
     for element in paragraph_elements:
         parser = element.parse
-        p_parser.parsers.append(parser)
+        paragraph_functors.append(parser)
 
+    for func in paragraph_functors:
+        p_parser.register_parser(func)
+
+    return p_parser
+
+
+def create_block_parsers():
+    b_parser = BlockParser()
     block_elements = [
         BoldBlock,
         ItalicBlock,
@@ -150,12 +160,17 @@ def create_paragrah_and_block_parsers():
     block_functors = []
     for element in block_elements:
         parser = element.parse
-        b_parser.parsers.append(parser)
+        block_functors.append(parser)
 
-    return (p_parser, b_parser)
+    for func in block_functors:
+        b_parser.register_parser(func)
+
+    return b_parser
+
 
 def parse_md_to_ast(md_content):
-    p_parser, b_parser = create_paragrah_and_block_parsers()
+    p_parser = create_paragraph_parsers()
+    b_parser = create_block_parsers()
 
     root = p_parser.parse(md_content)
     for child in root.children():
