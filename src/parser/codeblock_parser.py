@@ -1,6 +1,6 @@
 import re
 from typing import Text
-from ..blocks import CodeBlock
+from ..blocks import CodeBlock, TextBlock
 
 
 def parse_code_block(content: Text):

@@ -11,3 +11,6 @@ class TextBlock(Block):
 
     def render(self):
         return str(self._content)
+
+    def nested(self):
+        return False

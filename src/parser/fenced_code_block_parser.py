@@ -1,5 +1,5 @@
 import re
-from ..blocks import FencedCodeBlock
+from ..blocks import FencedCodeBlock, TextBlock
 
 _SUPPORTED_LANGUAGE = {
     "bsh", "c", "cc", "cpp", "cs", "csh", "cyc", "cv", "htm", "html", "java",
