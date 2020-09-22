@@ -1,8 +1,10 @@
 import sys
+from collections import OrderedDict
+
 
 from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
     HorizontalRule, ListParagraph, QuoteParagraph, BoldBlock, ItalicBlock, \
-        ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock
+    ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock
 
 from .bold_parser import parse_bold_block
 from .codeblock_parser import parse_code_block
@@ -15,8 +17,6 @@ from .link_block_parser import parse_link_block
 from .list_paragraph_parser import parse_ordered_list, parse_unordered_list
 from .quote_parser import parse_quote
 from .strikethrough_block_parser import parse_strike_through_block
-from collections import OrderedDict
-
 
 
 class AbstractParser(object):
@@ -88,8 +88,6 @@ def link_parent_and_child(parent, child):
 
 
 class BlockParser(AbstractParser):
-    def __init__(self):
-        super().__init__()
     def _invoke_parsers(self, parent, content):
         start_index = len(content)
         end_index = len(content)
@@ -120,7 +118,7 @@ class BlockParser(AbstractParser):
 
         for child in root.children():
             if child.nested():
-                    self.parse(child.content(), child)
+                self.parse(child.content(), child)
         return root
 
 
@@ -150,7 +148,6 @@ def create_block_parsers():
         b_parser.register_parser(func)
 
     return b_parser
-
 
 
 def parse_md_to_ast(md_content):

@@ -15,7 +15,7 @@ def parse_bold_block(content):
     Return (-1, -1, None) if no such match found.
     '''
     pattern = \
-        r'(?:^|[^\\])(([*_]{2,})((?:\\(?:\*|_|\\))*(?:.*[^*_\\])(?:\\(?:\*|_|\\))*)([*_]{2,}))'
+        r'(?:^|[^\\])(([*_]{2,})((?:\\(?:\*|_|\\))*(?:.*[^*_\\])(?:\\(?:\*|_|\\))*)([*_]{2,}))'  # pylint: disable=line-too-long
     matches = re.search(pattern, content)
     if matches:
         head_asterisks_num = len(matches.group(2))
@@ -29,8 +29,8 @@ def parse_bold_block(content):
 
         # follow the trigger convention of Github
         # as long as head or tail has three asterisks, it's bold and italic
-        if (head_asterisks_num == 3 or tail_asterisks_num == 3) and \
-            head_asterisks_num+tail_asterisks_num >= 6:
+        if ((head_asterisks_num == 3 or tail_asterisks_num == 3)
+                and head_asterisks_num + tail_asterisks_num >= 6):
             # match Bold and Italic first
             # ***test*** -> *test* -> pass to ItatlicBlock()
             head_remain = max(head_asterisks_num - 2, 0)

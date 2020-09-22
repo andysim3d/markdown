@@ -3,8 +3,9 @@ from ..blocks import ItalicBlock
 
 
 def parse_italic_block(content) -> (int, int, 'ItalicBlock'):
-    """Parse a italic content, and return (begin, end, ItalicBlock) if parseable,
-    or (-1, -1, None) that no such a element
+    """
+    Parse a italic content, and return (begin, end, ItalicBlock)
+    if parseable, or (-1, -1, None) that no such a element
     """
     pattern_star = r'(?:^|[^\\])([*])(.*[^\\])([*])'
     pattern_underscore = r'(?:^|[^\\])([_])(.*[^\\])([_])'

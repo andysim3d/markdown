@@ -1,7 +1,7 @@
 class Element(object):
     """Super class for any objects"""
     def __init__(self, content):
-        self._content = content # text content
+        self._content = content  # text content
         self._children = []
         self._parent = None
 

@@ -1,6 +1,7 @@
 import pytest
 from ..quote import QuoteParagraph
 
+
 @pytest.mark.parametrize("content, html", [
     (r'abc', r"<blockquote>abc</blockquote>"),
     (r'<html> rand tag </html>',

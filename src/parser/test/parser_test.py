@@ -24,10 +24,16 @@ from ...blocks import *
     ("# Test", [HeaderParagraph("Test")]),
     (r"""Test
 ----
-Test""", [TextParagraph("Test\n"), HorizontalRule(""), TextParagraph("\nTest")]),
+Test""",
+     [TextParagraph("Test\n"),
+      HorizontalRule(""),
+      TextParagraph("\nTest")]),
     (r"""1. List1
 2. List2
->content""", [OrderedList("List1"), OrderedList("List2"), QuoteParagraph("content")]),
+>content""",
+     [OrderedList("List1"),
+      OrderedList("List2"),
+      QuoteParagraph("content")]),
 ])
 def test_paragraph_parser(content, expected):
     paragraph_parser = create_paragraph_parsers()
@@ -38,10 +44,13 @@ def test_paragraph_parser(content, expected):
         assert isinstance(expected[i], type(children[i]))
         assert expected[i].content() == children[i].content()
 
+
 @pytest.mark.parametrize("content, expected", [
     ("testing", [TextBlock("testing")]),
     ("![test](testurl)", [ImgBlock("test", "testurl")]),
-    ("*testing*[test](testurl)", [ItalicBlock("testing"), LinkBlock("test", "testurl")]),
+    ("*testing*[test](testurl)",
+     [ItalicBlock("testing"),
+      LinkBlock("test", "testurl")]),
 ])
 def test_block_parser(content, expected):
     block_parser = create_block_parsers()
@@ -51,6 +60,7 @@ def test_block_parser(content, expected):
     for i in range(len(children)):
         assert isinstance(expected[i], type(children[i]))
         assert expected[i].content() == children[i].content()
+
 
 def test_nested_block_parser():
     block_parser = create_block_parsers()
