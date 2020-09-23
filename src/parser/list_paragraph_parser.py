@@ -15,7 +15,7 @@ def parse_ordered_list(content) -> (int, int, 'OrderedList'):
 
 def parse_unordered_list(content) -> (int, int, 'UnorderedList'):
     """
-    Parse a list paragraph, and return (begin, end, UnorderedList) 
+    Parse a list paragraph, and return (begin, end, UnorderedList)
     if parseable, or (-1, -1, None) that no such a element
     """
     pattern = r'^[ ]*(?:\*|\-|\+)[ ]+(.*)$\n*'

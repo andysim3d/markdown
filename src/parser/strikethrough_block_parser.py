@@ -3,13 +3,13 @@ from ..blocks import StrikethroughBlock
 
 
 def parse_strike_through_block(content) -> (int, int, 'StrikethroughBlock'):
-    """Parse a strikethrough content, and return (begin, end, 
+    """Parse a strikethrough content, and return (begin, end,
     StrikethroughBlock) if parseable,
     or (-1, -1, None) that no such a element.
     Behavior on github markdown:
     1) ~a~ or ~~a~~ -> strikethrough
     2) any single ~ is plain text. ~~a~ -> plain text
-    3) Once the number of leading ~ > 2, it will be a code 
+    3) Once the number of leading ~ > 2, it will be a code
     block and ignore content.
     """
     pattern = r'(^|[^\\])([~]+)(.*[^~\\])(\\~)*([~]+)'

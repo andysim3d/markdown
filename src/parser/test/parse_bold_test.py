@@ -5,14 +5,14 @@ from ..bold_parser import parse_bold_block
 @pytest.mark.parametrize(
     "content, start, end, sub_content",
     [
-        # Bold and Italic (Either head or tail has 3 asterisks 
+        # Bold and Italic (Either head or tail has 3 asterisks
         # and total asterisks > 6)
         ('***test***', 0, 10, '*test*'),
         ('****test***', 0, 11, '**test*'),
         ('***test****', 0, 11, '*test**'),
         ('*****test***', 0, 12, '***test*'),
         ('***test*****', 0, 12, '*test***'),
-        # Bold only (Otherwise from above, head and tail has at 
+        # Bold only (Otherwise from above, head and tail has at
         # least 2 asterisks)
         ('**test**', 0, 8, 'test'),
         ('***test**', 0, 9, '*test'),
