@@ -33,3 +33,6 @@ class Element(object):
         """Could this element hold other elements inside, True for yes.
         """
         return True
+
+    def __eq__(self, value):
+        return isinstance(value, Element) and value.content() == self.content()

@@ -25,15 +25,24 @@ from ...blocks import *
     (r"""Test
 ----
 Test""",
-     [TextParagraph("Test\n"),
+     [TextParagraph("Test"),
       HorizontalRule(""),
-      TextParagraph("\nTest")]),
+      TextParagraph("Test")]),
     (r"""1. List1
 2. List2
 >content""",
      [OrderedList("List1"),
       OrderedList("List2"),
       QuoteParagraph("content")]),
+    (r"""
+      
+      
+      
+      
+bala
+>test
+This is a 
+text paragraph""", [TextParagraph("bala"), QuoteParagraph("test"), TextParagraph("This is a text paragraph")])
 ])
 def test_paragraph_parser(content, expected):
     paragraph_parser = create_paragraph_parsers()

@@ -17,6 +17,7 @@ from .link_block_parser import parse_link_block
 from .list_paragraph_parser import parse_ordered_list, parse_unordered_list
 from .quote_parser import parse_quote
 from .strikethrough_block_parser import parse_strike_through_block
+from .text_paragraph_parser import parse_empty_newlines, parse_text_pargraph
 
 
 class AbstractParser(object):
@@ -49,6 +50,13 @@ class AbstractParser(object):
 
 
 class ParagraphParser(AbstractParser):
+    def __init__(self):
+        super().__init__()
+        self._default = None
+
+    def default_parser(self, parser):
+        self._default = parser
+
     def _invoke_parsers(self, parent, content):
         '''
         Invoke all parsers in self._parsers to try to parse the content.
@@ -59,12 +67,15 @@ class ParagraphParser(AbstractParser):
         final_element = TextParagraph(content)
         for parser in self._parsers:
             begin, end, element = parser(content)
-            print(begin, end, element)
             if begin != -1 and begin < start_index:
                 start_index, end_index, final_element = begin, end, element
-        if start_index > 0 and start_index != len(content):
-            text_paragraph = TextParagraph(content[:start_index])
-            link_parent_and_child(parent, text_paragraph)
+        if start_index > 0:
+            # try to eliminate empty lines
+            empty_lines_start, empty_lines_end, _ = parse_empty_newlines(content)
+            if empty_lines_start == 0:
+                return content[empty_lines_end:]
+            else:
+                start_index, end_index, final_element = self._default(content[:start_index])
         link_parent_and_child(parent, final_element)
         return content[end_index:]
 
@@ -78,6 +89,7 @@ class ParagraphParser(AbstractParser):
             root = Element(content)
         remain_content = self._invoke_parsers(root, content)
         while remain_content:
+            print("remaining: '", remain_content, "'")
             remain_content = self._invoke_parsers(root, remain_content)
         return root
 
@@ -131,6 +143,7 @@ def create_paragraph_parsers():
     for func in paragraph_functors:
         p_parser.register_parser(func)
 
+    p_parser.default_parser(parse_text_pargraph)
     return p_parser
 
 
