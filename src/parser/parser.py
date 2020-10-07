@@ -76,13 +76,14 @@ class ParagraphParser(AbstractParser):
             if empty_lines_start == 0:
                 print("here")
                 ## put an empty text paragraph to avoid paragraph merge.
-                start_index, end_index, final_element = empty_lines_start, empty_lines_end, TextParagraph("")
+                start_index, end_index, final_element = empty_lines_start, empty_lines_end, TextParagraph(
+                    "")
                 ## put an empty text paragraph to avoid paragraph merge.
             else:
                 print("here2")
                 start_index, end_index, final_element = self._default(
                     content[:start_index])
-        print ("parsed object", content, final_element)
+        print("parsed object", content, final_element)
         link_parent_and_child(parent, final_element)
         return content[end_index:]
 

@@ -33,7 +33,6 @@ def test_text_paragraph_parse(content, expected_start, expected_end, expected_ob
 """, 0, 2),
     (r"""
 """, 0, 1),
-    
 ])
 def test_multiple_line_parse(content, expected_start, expected_end):
     start, end, _ = parse_empty_newlines(content)
