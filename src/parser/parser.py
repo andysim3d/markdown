@@ -71,12 +71,11 @@ class ParagraphParser(AbstractParser):
                 start_index, end_index, final_element = begin, end, element
         if start_index > 0:
             # try to eliminate empty lines
-            empty_lines_start, empty_lines_end, _ = parse_empty_newlines(
-                content)
-            if empty_lines_start == 0:
+            begin, end, _ = parse_empty_newlines(content)
+            if begin == 0:
                 print("here")
                 ## put an empty text paragraph to avoid paragraph merge.
-                start_index, end_index, final_element = empty_lines_start, empty_lines_end, TextParagraph(
+                start_index, end_index, final_element = begin, end, TextParagraph(
                     "")
                 ## put an empty text paragraph to avoid paragraph merge.
             else:
