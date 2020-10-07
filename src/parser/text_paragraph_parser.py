@@ -26,7 +26,7 @@ def parse_empty_newlines(content) -> (int, int, 'None'):
     Parse multiple empty line. If match, return start and end of continous empty lines.
     or -1, -1, None.
     """
-    pattern = r"(\s*\n){2,}"
+    pattern = r"(\s*\n)+"
     empty_line_match = re.search(pattern, content, re.MULTILINE)
     if empty_line_match and empty_line_match.start() == 0:
         return (empty_line_match.start(), empty_line_match.end(), None)

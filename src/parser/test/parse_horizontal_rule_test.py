@@ -4,14 +4,15 @@ from ..horizontal_rule_parser import parse_horiontal_rule
 
 @pytest.mark.parametrize("content, start, end", [('***', 0, 3), ('____', 0, 4),
                                                  ('-----', 0, 5),
-                                                 (' ------', 1, 7),
-                                                 ('______ ', 0, 6),
+                                                 (' ------', 0, 7),
+                                                 ('______ ', 0, 7),
+                                                 ('______ \n', 0, 8),
                                                  ('''
 
 
 -----
 
-''', 3, 8)])
+''', 3, 9)])
 def test_parse(content, start, end):
     (start_index, end_index, hori_rule) = parse_horiontal_rule(content)
     assert start_index == start

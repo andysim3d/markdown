@@ -71,13 +71,45 @@ class ParagraphParser(AbstractParser):
                 start_index, end_index, final_element = begin, end, element
         if start_index > 0:
             # try to eliminate empty lines
-            empty_lines_start, empty_lines_end, _ = parse_empty_newlines(content)
+            empty_lines_start, empty_lines_end, _ = parse_empty_newlines(
+                content)
             if empty_lines_start == 0:
-                return content[empty_lines_end:]
+                print("here")
+                ## put an empty text paragraph to avoid paragraph merge.
+                start_index, end_index, final_element = empty_lines_start, empty_lines_end, TextParagraph("")
+                ## put an empty text paragraph to avoid paragraph merge.
             else:
-                start_index, end_index, final_element = self._default(content[:start_index])
+                print("here2")
+                start_index, end_index, final_element = self._default(
+                    content[:start_index])
+        print ("parsed object", content, final_element)
         link_parent_and_child(parent, final_element)
         return content[end_index:]
+
+    def _post_parse_merge_quote(self, root):
+        """
+        After parse, merge merabele paragraph.
+        For instance,
+        ">a
+         >b
+        "
+        will be merged with one QuoteBlock.
+        """
+        cur = 0
+        while cur < len(root.children):
+            if isinstance(root.children[cur], QuoteParagraph):
+                content = [root.children[cur].content()]
+                index = cur
+                cur += 1
+                merged = 0
+                while (cur < len(root.children)
+                       and isinstance(root.children[cur], QuoteParagraph)):
+                    content.append(root.children[cur].content())
+                    root.children.pop(cur)
+                    merged += 1
+                if merged:
+                    root.children[index] = QuoteParagraph("\n".join(content))
+            cur += 1
 
     def parse(self, content, root=None):
         """
@@ -91,6 +123,7 @@ class ParagraphParser(AbstractParser):
         while remain_content:
             print("remaining: '", remain_content, "'")
             remain_content = self._invoke_parsers(root, remain_content)
+        self._post_parse_merge_quote(root)
         return root
 
 
@@ -128,7 +161,7 @@ class BlockParser(AbstractParser):
         while cur_content:
             cur_content = self._invoke_parsers(root, cur_content)
 
-        for child in root.children():
+        for child in root.children:
             if child.nested():
                 self.parse(child.content(), child)
         return root
@@ -168,7 +201,7 @@ def parse_md_to_ast(md_content):
     b_parser = create_block_parsers()
 
     root = p_parser.parse(md_content)
-    for child in root.children():
+    for child in root.children:
         b_parser.parse(child.content, child)
 
     return root

@@ -42,12 +42,17 @@ Test""",
 bala
 >test
 This is a 
-text paragraph""", [TextParagraph("bala"), QuoteParagraph("test"), TextParagraph("This is a text paragraph")])
+text paragraph""", [TextParagraph(""),TextParagraph("bala"), QuoteParagraph("test"), TextParagraph("This is a text paragraph")]),
+(r""">a
+>b""", [QuoteParagraph("a\nb")]),
+(r""">a
+
+>b""", [QuoteParagraph("a"), TextParagraph(""), QuoteParagraph("b")])
 ])
 def test_paragraph_parser(content, expected):
     paragraph_parser = create_paragraph_parsers()
     root = paragraph_parser.parse(content)
-    children = root.children()
+    children = root.children
     assert len(expected) == len(children)
     for i in range(len(children)):
         assert isinstance(expected[i], type(children[i]))
@@ -64,7 +69,7 @@ def test_paragraph_parser(content, expected):
 def test_block_parser(content, expected):
     block_parser = create_block_parsers()
     root = block_parser.parse(content)
-    children = root.children()
+    children = root.children
     assert len(expected) == len(children)
     for i in range(len(children)):
         assert isinstance(expected[i], type(children[i]))
@@ -81,10 +86,10 @@ def test_nested_block_parser():
     }
     root = block_parser.parse(content)
     print(root.render())
-    cur = root.children()
+    cur = root.children
     idx = 0
     while not cur:
         assert isinstance(expected[idx], type(cur[0]))
         assert expected[idx].content() == cur[0].content()
-        cur = cur[0].children()
+        cur = cur[0].children
         idx += 1

@@ -12,11 +12,15 @@ class Element(object):
     def content(self):
         return self._content
 
+    @property
     def children(self):
         return self._children
 
-    def add_child(self, child):
-        self._children.append(child)
+    def add_child(self, child, index=None):
+        if not index or index > len(self._children):
+            self._children.append(child)
+        else:
+            self._children.insert(index, child)
 
     @property
     def parent(self):

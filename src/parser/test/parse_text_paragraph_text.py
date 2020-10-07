@@ -31,6 +31,9 @@ def test_text_paragraph_parse(content, expected_start, expected_end, expected_ob
     (r"""
 
 """, 0, 2),
+    (r"""
+""", 0, 1),
+    
 ])
 def test_multiple_line_parse(content, expected_start, expected_end):
     start, end, _ = parse_empty_newlines(content)
@@ -38,8 +41,6 @@ def test_multiple_line_parse(content, expected_start, expected_end):
     assert expected_end == end
 
 @pytest.mark.parametrize("content", [
-    (r"""
-    """),
     (r""""""),
 ])
 def test_multiple_line_parse_failed(content):
