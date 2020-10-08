@@ -1,26 +1,38 @@
-## Contributing
+## Installation
 
-> To get started...
+- All the `code` required to get started
+- Images of what it should look like
 
-### Step 1
+### Clone
 
-- **Option 1**
-    - 🍴 Fork this repo!
+- Clone this repo to your local machine using `https://github.com/fvcproductions/SOMEREPO`
 
-- **Option 2**
-    - 👯 Clone this repo to your local machine using `https://github.com/joanaz/HireDot2.git`
+### Setup
 
-### Step 2
+- If you want more syntax highlighting, format your code like this:
 
-- **HACK AWAY!** 🔨🔨🔨
+> update and install this package first
 
-### Step 3
+```shell
+$ brew update
+$ brew install fvcproductions
+```
 
-- 🔃 Create a new pull request using <a href="https://github.com/joanaz/HireDot2/compare/" target="_blank">`https://github.com/joanaz/HireDot2/compare/`</a>.
+> now install npm and bower packages
+
+```shell
+$ npm install
+$ bower install
+```
+
+- For all the possible languages that support syntax highlithing on GitHub (which is basically all of them), refer <a href="https://github.com/github/linguist/blob/master/lib/linguist/languages.yml" target="_blank">here</a>.
 
 ---
 
-## FAQ
+## Features
+## Usage (Optional)
+## Documentation (Optional)
+## Tests (Optional)
 
-- **How do I do *specifically* so and so?**
-    - No problem! Just do this.
+- Going into more detail on code and technologies used
+- I utilized this nifty <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">Markdown Cheatsheet</a> for this sample `README`
