@@ -28,12 +28,6 @@ Test""",
      [TextParagraph("Test"),
       HorizontalRule(""),
       TextParagraph("Test")]),
-    (r"""1. List1
-2. List2
->content""",
-     [OrderedList("List1"),
-      OrderedList("List2"),
-      QuoteParagraph("content")]),
     (r"""
       
       
@@ -43,6 +37,13 @@ bala
 >test
 This is a 
 text paragraph""", [TextParagraph(""),TextParagraph("bala"), QuoteParagraph("test"), TextParagraph("This is a text paragraph")]),
+(r"""1. List1
+2. List2
+>content
+1. List3
+- List4
+""", [ListWrapper([OrderedList("List1"),OrderedList("List2")], True), QuoteParagraph("content"), 
+        ListWrapper([OrderedList("List3")], True), ListWrapper([OrderedList("List4")], False)]),
 (r""">a
 >b""", [QuoteParagraph("a\nb")]),
 (r""">a
@@ -74,7 +75,6 @@ def test_block_parser(content, expected):
     for i in range(len(children)):
         assert isinstance(expected[i], type(children[i]))
         assert expected[i].content() == children[i].content()
-
 
 def test_nested_block_parser():
     block_parser = create_block_parsers()

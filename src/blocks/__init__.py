@@ -3,7 +3,7 @@ from .quote import QuoteParagraph
 from .header import HeaderParagraph
 from .horizontal_rule import HorizontalRule
 from .fenced_code_block import FencedCodeBlock
-from .list_paragraph import OrderedList, UnorderedList, ListParagraph
+from .list_paragraph import OrderedList, UnorderedList, ListParagraph, ListWrapper
 
 # Blocks
 from .block import Block, TextBlock

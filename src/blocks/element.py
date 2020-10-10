@@ -39,4 +39,4 @@ class Element(object):
         return True
 
     def __eq__(self, value):
-        return isinstance(value, Element) and value.content() == self.content()
+        return isinstance(value, type(self)) and value.content() == self.content()

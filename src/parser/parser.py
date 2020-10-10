@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
     HorizontalRule, ListParagraph, QuoteParagraph, BoldBlock, ItalicBlock, \
-    ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock
+    ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock, ListWrapper
 
 from .bold_parser import parse_bold_block
 from .codeblock_parser import parse_code_block
@@ -82,11 +82,13 @@ class ParagraphParser(AbstractParser):
                 print("here2")
                 start_index, end_index, final_element = self._default(
                     content[:start_index])
-        print("parsed object", content, final_element)
-        link_parent_and_child(parent, final_element)
+        final_element = self._post_parse_merge_quote(parent, final_element)
+        tmp_parent = self._post_parse_merge_list(parent, final_element)
+        print(tmp_parent)
+        link_parent_and_child(tmp_parent, final_element)
         return content[end_index:]
 
-    def _post_parse_merge_quote(self, root):
+    def _post_parse_merge_quote(self, parent, new_element):
         """
         After parse, merge merabele paragraph.
         For instance,
@@ -95,21 +97,29 @@ class ParagraphParser(AbstractParser):
         "
         will be merged with one QuoteBlock.
         """
-        cur = 0
-        while cur < len(root.children):
-            if isinstance(root.children[cur], QuoteParagraph):
-                content = [root.children[cur].content()]
-                index = cur
-                cur += 1
-                merged = 0
-                while (cur < len(root.children)
-                       and isinstance(root.children[cur], QuoteParagraph)):
-                    content.append(root.children[cur].content())
-                    root.children.pop(cur)
-                    merged += 1
-                if merged:
-                    root.children[index] = QuoteParagraph("\n".join(content))
-            cur += 1
+        if (parent.children and isinstance(new_element, QuoteParagraph)
+                and isinstance(parent.children[-1], QuoteParagraph)):
+            content = "\n".join((
+                parent.children[-1].content(),
+                new_element.content(),
+            ))
+            parent.children.pop(-1)
+            return QuoteParagraph(content)
+        else:
+            return new_element
+
+    def _post_parse_merge_list(self, parent, new_element):
+        print(new_element, new_element.render())
+        if parent.children and isinstance(new_element, ListParagraph):
+            if (isinstance(parent.children[-1], ListWrapper)
+                    and parent.children[-1].is_ordered()
+                    == new_element.is_ordered()):
+                return parent.children[-1]
+        if isinstance(new_element, ListParagraph):
+            virtual_list = ListWrapper([], new_element.is_ordered())
+            link_parent_and_child(parent, virtual_list)
+            return parent.children[-1]
+        return parent
 
     def parse(self, content, root=None):
         """
@@ -121,11 +131,8 @@ class ParagraphParser(AbstractParser):
             root = Element(content)
         remain_content = self._invoke_parsers(root, content)
         while remain_content:
-            print("remaining: '", remain_content, "'")
             remain_content = self._invoke_parsers(root, remain_content)
-        self._post_parse_merge_quote(root)
         return root
-
 
 def link_parent_and_child(parent, child):
     child.parent = parent
