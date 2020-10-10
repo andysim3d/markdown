@@ -73,18 +73,15 @@ class ParagraphParser(AbstractParser):
             # try to eliminate empty lines
             begin, end, _ = parse_empty_newlines(content)
             if begin == 0:
-                print("here")
                 ## put an empty text paragraph to avoid paragraph merge.
                 start_index, end_index, final_element = begin, end, TextParagraph(
                     "")
                 ## put an empty text paragraph to avoid paragraph merge.
             else:
-                print("here2")
                 start_index, end_index, final_element = self._default(
                     content[:start_index])
         final_element = self._post_parse_merge_quote(parent, final_element)
         tmp_parent = self._post_parse_merge_list(parent, final_element)
-        print(tmp_parent)
         link_parent_and_child(tmp_parent, final_element)
         return content[end_index:]
 
@@ -109,7 +106,6 @@ class ParagraphParser(AbstractParser):
             return new_element
 
     def _post_parse_merge_list(self, parent, new_element):
-        print(new_element, new_element.render())
         if parent.children and isinstance(new_element, ListParagraph):
             if (isinstance(parent.children[-1], ListWrapper)
                     and parent.children[-1].is_ordered()
