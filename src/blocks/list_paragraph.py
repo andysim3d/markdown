@@ -19,7 +19,7 @@ class ListWrapper(Paragraph):
         super().__init__(None)
         self._children = content if content else []
         self._is_ordered = is_ordered
-    
+
     def is_ordered(self):
         return self._is_ordered
 
