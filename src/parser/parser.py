@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
     HorizontalRule, ListParagraph, QuoteParagraph, BoldBlock, ItalicBlock, \
-    ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock
+    ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock, ListWrapper
 
 from .bold_parser import parse_bold_block
 from .codeblock_parser import parse_code_block
@@ -17,6 +17,7 @@ from .link_block_parser import parse_link_block
 from .list_paragraph_parser import parse_ordered_list, parse_unordered_list
 from .quote_parser import parse_quote
 from .strikethrough_block_parser import parse_strike_through_block
+from .text_paragraph_parser import parse_empty_newlines, parse_text_pargraph
 
 
 class AbstractParser(object):
@@ -49,6 +50,13 @@ class AbstractParser(object):
 
 
 class ParagraphParser(AbstractParser):
+    def __init__(self):
+        super().__init__()
+        self._default = None
+
+    def default_parser(self, parser):
+        self._default = parser
+
     def _invoke_parsers(self, parent, content):
         '''
         Invoke all parsers in self._parsers to try to parse the content.
@@ -59,14 +67,55 @@ class ParagraphParser(AbstractParser):
         final_element = TextParagraph(content)
         for parser in self._parsers:
             begin, end, element = parser(content)
-            print(begin, end, element)
             if begin != -1 and begin < start_index:
                 start_index, end_index, final_element = begin, end, element
-        if start_index > 0 and start_index != len(content):
-            text_paragraph = TextParagraph(content[:start_index])
-            link_parent_and_child(parent, text_paragraph)
-        link_parent_and_child(parent, final_element)
+        if start_index > 0:
+            # try to eliminate empty lines
+            begin, end, _ = parse_empty_newlines(content)
+            if begin == 0:
+                ## put an empty text paragraph to avoid paragraph merge.
+                start_index, end_index, final_element = begin, end, TextParagraph(
+                    "")
+                ## put an empty text paragraph to avoid paragraph merge.
+            else:
+                start_index, end_index, final_element = self._default(
+                    content[:start_index])
+        final_element = self._post_parse_merge_quote(parent, final_element)
+        tmp_parent = self._post_parse_merge_list(parent, final_element)
+        link_parent_and_child(tmp_parent, final_element)
         return content[end_index:]
+
+    def _post_parse_merge_quote(self, parent, new_element):
+        """
+        After parse, merge merabele paragraph.
+        For instance,
+        ">a
+         >b
+        "
+        will be merged with one QuoteBlock.
+        """
+        if (parent.children and isinstance(new_element, QuoteParagraph)
+                and isinstance(parent.children[-1], QuoteParagraph)):
+            content = "\n".join((
+                parent.children[-1].content(),
+                new_element.content(),
+            ))
+            parent.children.pop(-1)
+            return QuoteParagraph(content)
+        else:
+            return new_element
+
+    def _post_parse_merge_list(self, parent, new_element):
+        if parent.children and isinstance(new_element, ListParagraph):
+            if (isinstance(parent.children[-1], ListWrapper)
+                    and parent.children[-1].is_ordered()
+                    == new_element.is_ordered()):
+                return parent.children[-1]
+        if isinstance(new_element, ListParagraph):
+            virtual_list = ListWrapper([], new_element.is_ordered())
+            link_parent_and_child(parent, virtual_list)
+            return parent.children[-1]
+        return parent
 
     def parse(self, content, root=None):
         """
@@ -80,7 +129,6 @@ class ParagraphParser(AbstractParser):
         while remain_content:
             remain_content = self._invoke_parsers(root, remain_content)
         return root
-
 
 def link_parent_and_child(parent, child):
     child.parent = parent
@@ -116,7 +164,7 @@ class BlockParser(AbstractParser):
         while cur_content:
             cur_content = self._invoke_parsers(root, cur_content)
 
-        for child in root.children():
+        for child in root.children:
             if child.nested():
                 self.parse(child.content(), child)
         return root
@@ -131,6 +179,7 @@ def create_paragraph_parsers():
     for func in paragraph_functors:
         p_parser.register_parser(func)
 
+    p_parser.default_parser(parse_text_pargraph)
     return p_parser
 
 
@@ -155,7 +204,7 @@ def parse_md_to_ast(md_content):
     b_parser = create_block_parsers()
 
     root = p_parser.parse(md_content)
-    for child in root.children():
+    for child in root.children:
         b_parser.parse(child.content, child)
 
     return root
