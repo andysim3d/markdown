@@ -12,9 +12,9 @@ def parse_horiontal_rule(content):
     Note, the index of start and end follow the convention of [start, end)
     Return (-1, -1, None) if no such match found.
     '''
-    pattern = r'^\s*(\*{3,}|-{3,}|_{3,})\s?$'
+    pattern = r'^[^\S\r\n]*(\*{3,}|-{3,}|_{3,})[^\S\r\n]*$\n?'
     matches = re.search(pattern, content, re.MULTILINE)
     if matches:
-        return (matches.start(1), matches.end(1), HorizontalRule(''))
+        return (matches.start(), matches.end(), HorizontalRule(''))
     else:
         return (-1, -1, None)
