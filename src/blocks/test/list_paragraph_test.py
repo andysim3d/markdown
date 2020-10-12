@@ -1,5 +1,5 @@
 import pytest
-from ..list_paragraph import OrderedList, UnorderedList
+from ..list_paragraph import OrderedList, UnorderedList, ListWrapper
 
 
 @pytest.mark.parametrize("content, html",
@@ -16,3 +16,15 @@ def test_ordered_render(content, html):
 def test_unordered_render(content, html):
     unordered_list = UnorderedList(content)
     assert html == unordered_list.render()
+
+
+@pytest.mark.parametrize("content, ordered, html", [
+    ([OrderedList("first item")], True, "<ol><li>first item</li></ol>"),
+    ([OrderedList("second item")], False, "<ul><li>second item</li></ul>"),
+    ([OrderedList("first item"),
+      OrderedList("second item")
+      ], False, "<ul><li>first item</li>\n<li>second item</li></ul>"),
+])
+def test_list_wrapper_render(content, ordered, html):
+    list_wrapper = ListWrapper(content, is_ordered=ordered)
+    assert html == list_wrapper.render()

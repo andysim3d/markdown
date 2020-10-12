@@ -7,4 +7,5 @@ class Paragraph(Element):
 
 
 class TextParagraph(Paragraph):
-    pass
+    def __init__(self, content):
+        super().__init__(content)
