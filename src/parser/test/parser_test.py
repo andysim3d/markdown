@@ -4,20 +4,6 @@ import pytest
 from ..parser import ParagraphParser, BlockParser,\
     create_paragraph_parsers, create_block_parsers
 from ...blocks import *
-# from block import TextBlock
-# from bold import BoldBlock
-# from italic_block import ItalicBlock
-# from img import ImgBlock
-# from link_block import LinkBlock
-# from codeblock import CodeBlock
-# from fenched_code_block import FenchedCodeBlock
-# from strikethrough_block import StrikethroughBlock
-
-# from paragraph import TextParagraph
-# from header import Header
-# from horizontal_rule import HorizontalRule
-# from list_paragraph import OrderedList, UnorderedList
-# from quote import QuoteParagraph
 
 
 @pytest.mark.parametrize("content, expected", [
@@ -48,7 +34,21 @@ text paragraph""", [TextParagraph(""),TextParagraph("bala"), QuoteParagraph("tes
 >b""", [QuoteParagraph("a\nb")]),
 (r""">a
 
->b""", [QuoteParagraph("a"), TextParagraph(""), QuoteParagraph("b")])
+>b""", [QuoteParagraph("a"), TextParagraph(""), QuoteParagraph("b")]),
+(r"""1. List1
+   - subList1
+       - subList2
+""", [ListWrapper([OrderedList("List1"), ListWrapper([UnorderedList("subList1"), ListWrapper([UnorderedList("subList2")], False)], False)], True)]),
+(r"""1. List1
+   - subList1
+   - subList2
+2. List2
+""", [ListWrapper([OrderedList("List1"), ListWrapper([UnorderedList("subList1"), UnorderedList("subList2")], False), OrderedList("List2")], True)]),
+(r"""1. List1
+    - subList1
+2. List2
+    - subList2
+""", [ListWrapper([OrderedList("List1"), ListWrapper([UnorderedList("subList1")], False), OrderedList("List2"), ListWrapper([UnorderedList("subList2")], False)], True)]),
 ])
 def test_paragraph_parser(content, expected):
     paragraph_parser = create_paragraph_parsers()
