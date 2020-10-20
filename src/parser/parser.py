@@ -205,6 +205,6 @@ def parse_md_to_ast(md_content):
 
     root = p_parser.parse(md_content)
     for child in root.children:
-        b_parser.parse(child.content, child)
+        b_parser.parse(child.content(), child)
 
     return root
