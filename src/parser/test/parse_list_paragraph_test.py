@@ -5,7 +5,8 @@ from ..list_paragraph_parser import parse_ordered_list, parse_unordered_list
 @pytest.mark.parametrize("content, expected_start, expected_end, expected_indent, html",
                          [("1. first item", 0, 13, 0, "<li>first item</li>"),
                           ("1.  first item", 0, 14, 0, "<li>first item</li>"),
-                          ("  1. first item", 0, 15, 2, "<li>first item</li>")])
+                          ("  1. first item", 0, 15, 2, "<li>first item</li>"),
+                          ("\t\t 1. first item", 0, 22, 9, "<li>first item</li>")])
 def test_ordered_parse(content, expected_start, expected_end, expected_indent, html):
     start, end, ordered_list = parse_ordered_list(content)
     assert expected_start == start
@@ -34,7 +35,8 @@ def test_ordered_parse_failed(content):
                           ("- first item", 0, 12, 0, "<li>first item</li>"),
                           ("+ first item", 0, 12, 0, "<li>first item</li>"),
                           (" - first item", 0, 13, 1, "<li>first item</li>"),
-                          (r"- \-first item", 0, 14, 0, r"<li>\-first item</li>")]
+                          (r"- \-first item", 0, 14, 0, r"<li>\-first item</li>"),
+                          ("\t - first item", 0, 17, 5, "<li>first item</li>")]
                          )
 def test_unordered_parse(content, expected_start, expected_end, expected_indent, html):
     start, end, unordered_list = parse_unordered_list(content)
