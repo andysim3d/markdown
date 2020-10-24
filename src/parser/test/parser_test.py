@@ -166,5 +166,5 @@ def test_ast_equivalence():
     tree1 = create_tree1()
     tree2 = create_tree2()
     tree3 = create_tree3()
-    assert tree1 == tree2
-    assert tree1 == tree3
+    assert tree1 != tree2
+    assert tree1 != tree3
