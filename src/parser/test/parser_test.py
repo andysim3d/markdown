@@ -28,7 +28,7 @@ Test""",
      [TextParagraph("Test"),
       HorizontalRule(""),
       TextParagraph("Test")]),
-    (r"""
+    (r"""##This is
       
       
       
@@ -36,7 +36,7 @@ Test""",
 bala
 >test
 This is a 
-text paragraph""", [TextParagraph(""),TextParagraph("bala"), QuoteParagraph("test"), TextParagraph("This is a text paragraph")]),
+text paragraph""", [HeaderParagraph("This is", 2),TextParagraph(""),TextParagraph("bala"), QuoteParagraph("test"), TextParagraph("This is a text paragraph")]),
 (r"""1. List1
 2. List2
 >content

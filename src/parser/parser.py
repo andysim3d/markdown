@@ -19,7 +19,6 @@ from .quote_parser import parse_quote
 from .strikethrough_block_parser import parse_strike_through_block
 from .text_paragraph_parser import parse_empty_newlines, parse_text_pargraph
 
-
 class AbstractParser(object):
     def __init__(self):
         self._parsers = OrderedDict()
@@ -163,9 +162,8 @@ class BlockParser(AbstractParser):
         cur_content = content
         while cur_content:
             cur_content = self._invoke_parsers(root, cur_content)
-
         for child in root.children:
-            if child.nested():
+            if (not isinstance(child, TextBlock)) and  child.nested():
                 self.parse(child.content(), child)
         return root
 
