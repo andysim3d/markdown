@@ -2,7 +2,7 @@
 import pytest
 
 from ..parser import ParagraphParser, BlockParser,\
-    create_paragraph_parsers, create_block_parsers
+    create_paragraph_parsers, create_block_parsers, parse_md_to_ast
 from ...blocks import *
 # from block import TextBlock
 # from bold import BoldBlock
@@ -93,3 +93,78 @@ def test_nested_block_parser():
         assert expected[idx].content() == cur[0].content()
         cur = cur[0].children
         idx += 1
+
+
+def test_parse_md_to_ast_simple():
+    md = 'abc***bold***'
+    root = parse_md_to_ast(md)
+    assert isinstance(root, Element)
+    assert len(root.children) == 1
+    assert isinstance(root.children[0], TextParagraph)
+    assert isinstance(root.children[0].children[0], TextBlock)
+    assert isinstance(root.children[0].children[1], BoldBlock)
+    assert isinstance(root.children[0].children[1].children[0], ItalicBlock)
+    assert root.children[0].children[1].children[0].children[0].content() == 'bold'
+
+
+def test_ast_equivalence():
+    # Original Tree
+    def create_tree1():
+        return Element(
+            'abc***bold***',
+            [
+                TextParagraph(
+                    'abc***bold***',
+                    [
+                        TextBlock('abc'),
+                        BoldBlock('*bold*',[
+                                ItalicBlock('bold', [TextBlock('bold')])
+                            ]
+                        )
+                    ]
+                )
+            ]
+        )
+
+    # Tree with different child's content but same structure
+    def create_tree2():
+        return Element(
+            'abc***bold***',
+            [
+                TextParagraph(
+                    'abc***bold***',
+                    [
+                        TextBlock('abc'),
+                        BoldBlock('*bold*',[
+                                ItalicBlock('italic', [TextBlock('italic')])
+                            ]
+                        )
+                    ]
+                )
+            ]
+        )
+
+    # Tree with different children structure
+    def create_tree3():
+        return Element(
+            'abc***bold***',
+            [
+                TextParagraph(
+                    'abc***bold***',
+                    [
+                        TextBlock('abc'),
+                        BoldBlock('*bold*',[
+                                ItalicBlock('bold'),
+                                TextBlock('bold')
+                            ]
+                        )
+                    ]
+                )
+            ]
+        )
+    
+    tree1 = create_tree1()
+    tree2 = create_tree2()
+    tree3 = create_tree3()
+    assert tree1 != tree2
+    assert tree1 != tree3

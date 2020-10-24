@@ -1,8 +1,11 @@
 class Element(object):
     """Super class for any objects"""
-    def __init__(self, content):
+    def __init__(self, content, children=None):
         self._content = content  # text content
-        self._children = []
+        if children is None:
+            self._children = []
+        else:
+            self._children = children
         self._parent = None
 
     def render(self):
@@ -33,11 +36,15 @@ class Element(object):
     def _render(self):
         pass
 
+    def render_html(self):
+        return '<html>{}</html>'
+
     def nested(self):
         """Could this element hold other elements inside, True for yes.
         """
         return True
 
     def __eq__(self, value):
-        return isinstance(value,
-                          type(self)) and value.content() == self.content()
+        return isinstance(value, type(self)) and \
+            value.content() == self.content() and \
+                value.children == self.children

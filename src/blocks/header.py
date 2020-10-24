@@ -4,8 +4,8 @@ from .paragraph import Paragraph
 
 
 class HeaderParagraph(Paragraph):
-    def __init__(self, content, level=1):
-        super().__init__(content)
+    def __init__(self, content, level=1, children=None):
+        super().__init__(content, children)
         assert level > 0 and level <= 6
         self._level = level
 

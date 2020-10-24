@@ -3,8 +3,8 @@ from .paragraph import Paragraph
 
 
 class ListParagraph(Paragraph):
-    def __init__(self, content, is_ordered):
-        super().__init__(content)
+    def __init__(self, content, is_ordered, children=None):
+        super().__init__(content, children)
         self._is_ordered = is_ordered
 
     def render(self) -> str:
