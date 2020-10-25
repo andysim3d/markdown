@@ -40,7 +40,7 @@ def _render_a_element(element):
     if isinstance(element, ImgBlock):
         return "<img src={} alt={}/>".format(element.url(), element.content())
     if isinstance(element, LinkBlock):
-        return "<a herf={} />".format(element.content())
+        return "<a herf={0}>{1}</a>".format(element.url(), element.content())
     if isinstance(element, CodeBlock):
         return "<code>{}</code>".format(element.content())
 
@@ -52,6 +52,8 @@ def _render_a_element(element):
         _format = "<em>{}</em>"
     if isinstance(element, StrikethroughBlock):
         _format = "<del>{}</del>"
+    if isinstance(element, QuoteParagraph):
+        _format = "<blockquote>{}</blockquote>"
 
     return _format.format("".join(
         [_render_a_element(i) for i in element.children]))

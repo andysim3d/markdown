@@ -7,5 +7,7 @@ class LinkBlock(Block):
         super().__init__(content, children)
         self._url = url
 
+    def url(self):
+        return self._url
     def render(self) -> str:
         return f"<a href='{self._url}'>{self.content()}</a>"

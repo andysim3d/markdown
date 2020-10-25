@@ -10,7 +10,7 @@ class ImgBlock(Block):
     def nested(self):
         ''' Img Block should not has child '''
         return False
-    
+
     def url(self):
         return self._url
 

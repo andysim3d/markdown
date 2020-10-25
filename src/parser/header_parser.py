@@ -16,5 +16,6 @@ def parse_header_paragraph(content):
         if header_num > 6:
             return (-1, -1, None)
         header_content = header.group(4)
-        return (header.start(), header.end(), HeaderParagraph(level=header_num, content=header_content))
+        return (header.start(), header.end(),
+                HeaderParagraph(level=header_num, content=header_content))
     return (-1, -1, None)

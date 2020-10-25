@@ -190,6 +190,7 @@ def create_block_parsers():
         parse_link_block,
         parse_code_block,
         parse_strike_through_block,
+        parse_quote
     ]
     for func in block_functors:
         b_parser.register_parser(func)

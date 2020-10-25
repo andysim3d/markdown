@@ -8,7 +8,7 @@ class HeaderParagraph(Paragraph):
         super().__init__(content, children)
         assert level > 0 and level <= 6
         self._level = level
-    
+
     def level(self):
         return self._level
 
