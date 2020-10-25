@@ -106,16 +106,30 @@ class ParagraphParser(AbstractParser):
             return new_element
 
     def _post_parse_merge_list(self, parent, new_element):
-        if parent.children and isinstance(new_element, ListParagraph):
-            if (isinstance(parent.children[-1], ListWrapper)
-                    and parent.children[-1].is_ordered()
-                    == new_element.is_ordered()):
-                return parent.children[-1]
+        """
+        After parse, merge mergable list element and apply indentations
+        """
         if isinstance(new_element, ListParagraph):
-            virtual_list = ListWrapper([], new_element.is_ordered())
-            link_parent_and_child(parent, virtual_list)
-            return parent.children[-1]
+            new_element_indent = new_element.indent
+            prev_list_element = self._find_prev_list_element(parent, new_element_indent)
+            if prev_list_element.children:
+                if (isinstance(prev_list_element.children[-1], ListWrapper)
+                        and prev_list_element.children[-1].is_ordered()
+                        == new_element.is_ordered()):
+                    return prev_list_element.children[-1]
+            virtual_list = ListWrapper([], new_element.is_ordered(), new_element_indent)
+            link_parent_and_child(prev_list_element, virtual_list)
+            return prev_list_element.children[-1]
         return parent
+
+    def _find_prev_list_element(self, parent, indent):
+        cur = parent
+        while cur.children and hasattr(cur.children[-1], 'indent'):
+            diff = indent - cur.children[-1].indent
+            if diff < 1:
+                return cur
+            cur = cur.children[-1]
+        return cur
 
     def parse(self, content, root=None):
         """
