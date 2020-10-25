@@ -24,11 +24,10 @@ from ...blocks import *
     ("# Test", [HeaderParagraph("Test")]),
     (r"""Test
 ----
-Test""",
-     [TextParagraph("Test"),
-      HorizontalRule(""),
-      TextParagraph("Test")]),
-    (r"""
+Test""", [TextParagraph("Test"),
+          HorizontalRule(""),
+          TextParagraph("Test")]),
+    (r"""##This is
       
       
       
@@ -36,19 +35,31 @@ Test""",
 bala
 >test
 This is a 
-text paragraph""", [TextParagraph(""),TextParagraph("bala"), QuoteParagraph("test"), TextParagraph("This is a text paragraph")]),
-(r"""1. List1
+text paragraph""", [
+        HeaderParagraph("This is", 2),
+        TextParagraph(""),
+        TextParagraph("bala"),
+        QuoteParagraph("test"),
+        TextParagraph("This is a text paragraph")
+    ]),
+    (r"""1. List1
 2. List2
 >content
 1. List3
 - List4
-""", [ListWrapper([OrderedList("List1"),OrderedList("List2")], True), QuoteParagraph("content"), 
-        ListWrapper([OrderedList("List3")], True), ListWrapper([OrderedList("List4")], False)]),
-(r""">a
+""", [
+        ListWrapper(
+            [OrderedList("List1"), OrderedList("List2")], True),
+        QuoteParagraph("content"),
+        ListWrapper([OrderedList("List3")], True),
+        ListWrapper([OrderedList("List4")], False)
+    ]), (r""">a
 >b""", [QuoteParagraph("a\nb")]),
-(r""">a
+    (r""">a
 
->b""", [QuoteParagraph("a"), TextParagraph(""), QuoteParagraph("b")])
+>b""", [QuoteParagraph("a"),
+        TextParagraph(""),
+        QuoteParagraph("b")])
 ])
 def test_paragraph_parser(content, expected):
     paragraph_parser = create_paragraph_parsers()
@@ -75,6 +86,7 @@ def test_block_parser(content, expected):
     for i in range(len(children)):
         assert isinstance(expected[i], type(children[i]))
         assert expected[i].content() == children[i].content()
+
 
 def test_nested_block_parser():
     block_parser = create_block_parsers()
@@ -104,65 +116,40 @@ def test_parse_md_to_ast_simple():
     assert isinstance(root.children[0].children[0], TextBlock)
     assert isinstance(root.children[0].children[1], BoldBlock)
     assert isinstance(root.children[0].children[1].children[0], ItalicBlock)
-    assert root.children[0].children[1].children[0].children[0].content() == 'bold'
+    assert root.children[0].children[1].children[0].children[0].content(
+    ) == 'bold'
 
 
 def test_ast_equivalence():
     # Original Tree
     def create_tree1():
-        return Element(
-            'abc***bold***',
-            [
-                TextParagraph(
-                    'abc***bold***',
-                    [
-                        TextBlock('abc'),
-                        BoldBlock('*bold*',[
-                                ItalicBlock('bold', [TextBlock('bold')])
-                            ]
-                        )
-                    ]
-                )
-            ]
-        )
+        return Element('abc***bold***', [
+            TextParagraph('abc***bold***', [
+                TextBlock('abc'),
+                BoldBlock('*bold*', [ItalicBlock('bold', [TextBlock('bold')])])
+            ])
+        ])
 
     # Tree with different child's content but same structure
     def create_tree2():
-        return Element(
-            'abc***bold***',
-            [
-                TextParagraph(
-                    'abc***bold***',
-                    [
-                        TextBlock('abc'),
-                        BoldBlock('*bold*',[
-                                ItalicBlock('italic', [TextBlock('italic')])
-                            ]
-                        )
-                    ]
-                )
-            ]
-        )
+        return Element('abc***bold***', [
+            TextParagraph('abc***bold***', [
+                TextBlock('abc'),
+                BoldBlock('*bold*',
+                          [ItalicBlock('italic', [TextBlock('italic')])])
+            ])
+        ])
 
     # Tree with different children structure
     def create_tree3():
-        return Element(
-            'abc***bold***',
-            [
-                TextParagraph(
-                    'abc***bold***',
-                    [
-                        TextBlock('abc'),
-                        BoldBlock('*bold*',[
-                                ItalicBlock('bold'),
-                                TextBlock('bold')
-                            ]
-                        )
-                    ]
-                )
-            ]
-        )
-    
+        return Element('abc***bold***', [
+            TextParagraph('abc***bold***', [
+                TextBlock('abc'),
+                BoldBlock('*bold*', [ItalicBlock('bold'),
+                                     TextBlock('bold')])
+            ])
+        ])
+
     tree1 = create_tree1()
     tree2 = create_tree2()
     tree3 = create_tree3()

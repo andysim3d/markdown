@@ -11,6 +11,9 @@ class ImgBlock(Block):
         ''' Img Block should not has child '''
         return False
 
+    def url(self):
+        return self._url
+
     def render(self) -> str:
         return '<img src="{}" alt="{}"> </img>'.format(self._url,
                                                        self.content())
