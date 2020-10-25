@@ -9,6 +9,7 @@ def render(root):
         rendered_child.append(_render_a_paragraph(paragraph))
     return "<html>{}</html>".format("\n".join(rendered_child))
 
+
 def _render_a_paragraph(paragraph):
     if isinstance(paragraph, HorizontalRule):
         return "<hr/>"
@@ -57,15 +58,3 @@ def _render_a_element(element):
 
     return _format.format("".join(
         [_render_a_element(i) for i in element.children]))
-
-
-def _dfs(node):
-    if isinstance(node, TextBlock):
-        return node.content()
-
-    rendered_child = []
-    print(type(node), node.children)
-    for child in node.children:
-        rendered_child.append(_dfs(child))
-
-    return node.render_html().format(''.join(rendered_child))

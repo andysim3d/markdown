@@ -4,6 +4,7 @@ import src.parser.parser as parser
 import src.render.html_render as render
 import pytest
 
+
 def test():
     for file in os.listdir("./md_to_html"):
         if file.endswith(".md"):
