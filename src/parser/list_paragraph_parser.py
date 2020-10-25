@@ -28,7 +28,7 @@ def parse_unordered_list(content) -> (int, int, 'UnorderedList'):
     Parse a list paragraph, and return (begin, end, UnorderedList)
     if parseable, or (-1, -1, None) that no such a element
     """
-    pattern = r'^([ \t]*)(?:\*|\-|\+)[ ]+(.*)$\n*'
+    pattern = r'^([ \t]*)(?:\*|\-|\+)[ ]+.*$\n*'
     matches = re.search(pattern, content, re.MULTILINE)
     if matches:
         new_content = replace_leading_tabs(content, len(matches.group(1)))

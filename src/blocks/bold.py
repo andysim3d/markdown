@@ -8,3 +8,6 @@ class BoldBlock(Block):
     '''
     def _render(self):
         return '<strong>{}</strong>'.format(self.content())
+
+    def render_html(self):
+        return '<strong>{}</strong>'

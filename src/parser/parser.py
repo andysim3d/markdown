@@ -144,6 +144,7 @@ class ParagraphParser(AbstractParser):
             remain_content = self._invoke_parsers(root, remain_content)
         return root
 
+
 def link_parent_and_child(parent, child):
     child.parent = parent
     parent.add_child(child)
@@ -177,9 +178,8 @@ class BlockParser(AbstractParser):
         cur_content = content
         while cur_content:
             cur_content = self._invoke_parsers(root, cur_content)
-
         for child in root.children:
-            if child.nested():
+            if (not isinstance(child, TextBlock)) and child.nested():
                 self.parse(child.content(), child)
         return root
 
@@ -200,12 +200,9 @@ def create_paragraph_parsers():
 def create_block_parsers():
     b_parser = BlockParser()
     block_functors = [
-        parse_bold_block,
-        parse_italic_block,
-        parse_img_block,
-        parse_link_block,
-        parse_code_block,
-        parse_strike_through_block,
+        parse_bold_block, parse_italic_block, parse_img_block,
+        parse_link_block, parse_code_block, parse_strike_through_block,
+        parse_quote
     ]
     for func in block_functors:
         b_parser.register_parser(func)
@@ -219,6 +216,6 @@ def parse_md_to_ast(md_content):
 
     root = p_parser.parse(md_content)
     for child in root.children:
-        b_parser.parse(child.content, child)
+        b_parser.parse(child.content(), child)
 
     return root

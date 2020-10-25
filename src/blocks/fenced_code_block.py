@@ -13,8 +13,8 @@ class FencedCodeBlock(Paragraph):
         Support language hightlighting by using Goolge's code-prettify:
         https://github.com/googlearchive/code-prettify
     '''
-    def __init__(self, content, language=None):
-        super().__init__(content)
+    def __init__(self, content, language=None, children=None):
+        super().__init__(content, children)
         self._language = language
 
     def nested(self):
