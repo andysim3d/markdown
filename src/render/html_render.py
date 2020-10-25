@@ -16,7 +16,7 @@ def _render_a_paragraph(paragraph):
     if isinstance(paragraph, FencedCodeBlock):
         return "<code>{}</code>".format(paragraph.content())
     if isinstance(paragraph, HeaderParagraph):
-        return "<h{0}>{1}<h{0}>".format(paragraph.level(), paragraph.content())
+        return "<h{0}>{1}</h{0}>".format(paragraph.level(), paragraph.content())
 
     _format = ""
     if isinstance(paragraph, TextParagraph):
