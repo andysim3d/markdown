@@ -17,4 +17,7 @@ def test():
                 parsed_html = render.render(root)
             with open(full_path.replace(".md", ".html"), 'r') as html_file:
                 html_content = html_file.read()
+                print(html_content)
+                print("---------------------")
+                print(parsed_html)
                 assert html_content == parsed_html

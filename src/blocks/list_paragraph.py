@@ -8,9 +8,6 @@ class ListParagraph(Paragraph):
         self._is_ordered = is_ordered
         self._indent = indent
 
-    def render(self) -> str:
-        return f"<li>{self.content()}</li>"
-
     def is_ordered(self):
         return self._is_ordered
 
@@ -41,25 +38,25 @@ class ListWrapper(Paragraph):
     def indent(self, val):
         self._indent = val
 
-    def render(self) -> str:
-        rendered_children = "\n".join((i.render() for i in self._children))
-        if self._is_ordered:
-            return f"<ol>{rendered_children}</ol>"
-        else:
-            return f"<ul>{rendered_children}</ul>"
-
 
 class OrderedList(ListParagraph):
     """Line starting with number
     """
 
-    def __init__(self, content, indent=0):
-        super().__init__(content, True, indent)
+    def __init__(self, content, indent=0, children=None):
+        super().__init__(content, True, indent, children=children)
 
+    # # TODO: list can have italic or bold etc styles.
+    # def render(self, format_functor):
+    #     return format_functor(self).format(self.content())
 
 class UnorderedList(ListParagraph):
     """Line starting with '-', '*' or '+'
     """
 
-    def __init__(self, content, indent=0):
-        super().__init__(content, False, indent)
+    def __init__(self, content, indent=0, children=None):
+        super().__init__(content, False, indent, children=children)
+    
+    # # TODO: list can have italic or bold etc styles.
+    # def render(self, format_functor):
+    #     return format_functor(self).format(self.content())

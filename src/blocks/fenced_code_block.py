@@ -21,8 +21,8 @@ class FencedCodeBlock(Paragraph):
         '''Fenched Code Block should not hold child except TextBlock '''
         return False
 
-    def _render(self):
-        code_tag = '<code>{}</code>'.format(self.content())
+    def render(self, format_functor):
+        code_tag = format_functor(self).format(self.content())
         if not self._language:
             return '<pre class="prettyprint">{}</pre>'.format(code_tag)
         else:

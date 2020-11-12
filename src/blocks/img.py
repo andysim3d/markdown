@@ -13,7 +13,3 @@ class ImgBlock(Block):
 
     def url(self):
         return self._url
-
-    def render(self) -> str:
-        return '<img src="{}" alt="{}"> </img>'.format(self._url,
-                                                       self.content())

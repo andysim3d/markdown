@@ -1,5 +1,6 @@
 import pytest
 from ..codeblock_parser import parse_code_block
+from ...render.html_render import get_html_format
 
 
 @pytest.mark.parametrize("content, expected_html, start, end", [
@@ -13,7 +14,7 @@ def test_code_parse_success(content, expected_html, start, end):
     assert start == start_
     assert end == end_
     assert code is not None
-    assert expected_html == code.render()
+    assert expected_html == code.render(get_html_format)
 
 
 @pytest.mark.parametrize("content", [('`code\`'), ('`cod')])

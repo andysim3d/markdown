@@ -1,5 +1,6 @@
 import pytest
 from ..strikethrough_block_parser import parse_strike_through_block
+from ...render.html_render import get_html_format
 
 
 @pytest.mark.parametrize("content, expected_start, expected_end, html", [
@@ -17,7 +18,7 @@ def test_strikethrough_parse(content, expected_start, expected_end, html):
     assert expected_start == start
     assert expected_end == end
     assert strikethrough_block is not None
-    assert html == strikethrough_block.render()
+    assert html == strikethrough_block.render(get_html_format)
 
 
 @pytest.mark.parametrize("content", [("~test"), (r"\~test~"), ("~~test"),

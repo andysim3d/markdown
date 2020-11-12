@@ -12,5 +12,6 @@ class HeaderParagraph(Paragraph):
     def level(self):
         return self._level
 
-    def render(self):
-        return "<h{0}>{1}</h{0}>".format(self._level, self.content())
+    # # TODO: header can have italic or bold etc styles.
+    # def render(self, format_functor):
+    #     return format_functor(self).format(self.content())
