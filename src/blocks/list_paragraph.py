@@ -46,17 +46,9 @@ class OrderedList(ListParagraph):
     def __init__(self, content, indent=0, children=None):
         super().__init__(content, True, indent, children=children)
 
-    # # TODO: list can have italic or bold etc styles.
-    # def render(self, format_functor):
-    #     return format_functor(self).format(self.content())
-
 class UnorderedList(ListParagraph):
     """Line starting with '-', '*' or '+'
     """
 
     def __init__(self, content, indent=0, children=None):
         super().__init__(content, False, indent, children=children)
-    
-    # # TODO: list can have italic or bold etc styles.
-    # def render(self, format_functor):
-    #     return format_functor(self).format(self.content())

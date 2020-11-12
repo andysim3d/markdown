@@ -20,11 +20,7 @@ class Element(object):
         for child in self._children:
             rendered_children.append(child.render(format_functor))
 
-        result = format_functor(self).format("".join(rendered_children))
-        # print("RESULT: ", result)
-        #print("rendered_children: ", rendered_children)
-
-        return result
+        return format_functor(self).format("".join(rendered_children))
 
     def content(self):
         return self._content

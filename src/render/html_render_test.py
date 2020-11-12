@@ -17,16 +17,7 @@ from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
 def test_render_simple(md_str, expected):
     root = parse_md_to_ast(md_str)
     html = render(root)
-    # print("root: ", root)
-    print("root.children: ", root.children)
-    print("root.children[0].children: ", root.children[0].children)
-    print("root.children[0].children[1].children: ", root.children[0].children[1].children)
-    print("root.children[0].children[1].children[0].children: ", root.children[0].children[1].children[0].children)
-
-    # print("HTML: ", html)
-    # print("=========!!!!!!!!!!==========")
     assert html == expected
-
 
 
 # Test each element HTML render
