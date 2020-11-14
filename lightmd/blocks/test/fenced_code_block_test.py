@@ -1,5 +1,5 @@
 import pytest
-from ..fenced_code_block import FencedCodeBlock
+from .. import FencedCodeBlock
 
 
 @pytest.mark.parametrize(

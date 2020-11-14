@@ -1,5 +1,5 @@
 import pytest
-from ..quote import QuoteParagraph
+from .. import QuoteParagraph
 
 
 @pytest.mark.parametrize("content, html", [

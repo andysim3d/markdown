@@ -1,5 +1,5 @@
 import pytest
-from ..codeblock import CodeBlock
+from .. import CodeBlock
 
 
 @pytest.mark.parametrize("content, html", [

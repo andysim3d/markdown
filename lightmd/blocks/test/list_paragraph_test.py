@@ -1,5 +1,5 @@
 import pytest
-from ..list_paragraph import OrderedList, UnorderedList, ListWrapper
+from .. import OrderedList, UnorderedList, ListWrapper
 
 
 @pytest.mark.parametrize("content, html",

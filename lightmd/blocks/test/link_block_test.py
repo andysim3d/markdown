@@ -1,5 +1,5 @@
 import pytest
-from ..link_block import LinkBlock
+from .. import LinkBlock
 
 
 @pytest.mark.parametrize("content, url, html",
