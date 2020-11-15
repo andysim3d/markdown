@@ -1,5 +1,5 @@
 import pytest
-from ..bold import BoldBlock
+from .. import BoldBlock
 
 
 @pytest.mark.parametrize("content, html", [

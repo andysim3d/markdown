@@ -1,5 +1,5 @@
 import pytest
-from ..header import HeaderParagraph
+from .. import HeaderParagraph
 
 
 @pytest.mark.parametrize("content, level, html", [

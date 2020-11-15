@@ -1,5 +1,5 @@
 import pytest
-from src.blocks import StrikethroughBlock
+from .. import StrikethroughBlock
 
 
 @pytest.mark.parametrize("content, html",

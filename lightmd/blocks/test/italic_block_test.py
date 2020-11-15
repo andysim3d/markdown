@@ -1,5 +1,5 @@
 import pytest
-from ..italic_block import ItalicBlock
+from .. import ItalicBlock
 
 
 @pytest.mark.parametrize("content, html",

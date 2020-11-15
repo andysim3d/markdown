@@ -1,5 +1,5 @@
 import pytest
-from ..horizontal_rule import HorizontalRule
+from .. import HorizontalRule
 
 
 def test_render():

@@ -1,5 +1,5 @@
 import pytest
-from ..img import ImgBlock
+from .. import ImgBlock
 
 
 @pytest.mark.parametrize("content, url, html", [
