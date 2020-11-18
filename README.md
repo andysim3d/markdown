@@ -22,5 +22,7 @@ with open("your.md", "r") as md_file:
     parsed_content = lightmd.parse_md_to_ast(md_file) 
     ## Render to HTML
     rendered_html = lightmd.render_html(parsed_content)
+    ## Render to HTML with custom css style
+    rendered_html = lightmd.render_html(parsed_content, "css_style.css")
 ```
 

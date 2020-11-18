@@ -3,10 +3,12 @@ from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
     ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock, ListWrapper
 
 
-def render(root):
+def render(root, css_path=None):
     rendered_child = []
     for paragraph in root.children:
         rendered_child.append(_render_a_paragraph(paragraph))
+    if css_path:
+        rendered_child.insert(0, f'<head>\n<link rel="stylesheet" href="{css_path}">\n</head>')
     return "<html>{}</html>".format("\n".join(rendered_child))
 
 
