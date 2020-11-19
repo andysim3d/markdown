@@ -1,5 +1,6 @@
 import pytest
 from ..header_parser import parse_header_paragraph
+from ...render.html_render import get_html_format
 
 
 @pytest.mark.parametrize("content, expected_html",
@@ -11,7 +12,7 @@ def test_header_parse_success(content, expected_html):
     assert start == 0
     assert end == len(content)
     assert header is not None
-    assert expected_html == header.render()
+    assert expected_html == get_html_format(header).format(header.content())
 
 
 @pytest.mark.parametrize("content", [('####### ababa# bbba'), ('ttt')])

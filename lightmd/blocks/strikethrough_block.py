@@ -7,6 +7,3 @@ class StrikethroughBlock(Block):
     """
     def __init__(self, content, children=None):
         super().__init__(content, children)
-
-    def render(self) -> str:
-        return f"<del>{self.content()}</del>"

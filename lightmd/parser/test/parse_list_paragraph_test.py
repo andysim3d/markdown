@@ -1,5 +1,6 @@
 import pytest
 from ..list_paragraph_parser import parse_ordered_list, parse_unordered_list
+from ...render.html_render import get_html_format
 
 
 @pytest.mark.parametrize("content, expected_start, expected_end, expected_indent, html",
@@ -13,7 +14,7 @@ def test_ordered_parse(content, expected_start, expected_end, expected_indent, h
     assert expected_end == end
     assert ordered_list is not None
     assert expected_indent == ordered_list.indent
-    assert html == ordered_list.render()
+    assert html == get_html_format(ordered_list).format(ordered_list.content())
 
 
 @pytest.mark.parametrize("content", [
@@ -44,7 +45,7 @@ def test_unordered_parse(content, expected_start, expected_end, expected_indent,
     assert expected_end == end
     assert unordered_list is not None
     assert expected_indent == unordered_list.indent
-    assert html == unordered_list.render()
+    assert html == get_html_format(unordered_list).format(unordered_list.content())
 
 
 @pytest.mark.parametrize("content", [

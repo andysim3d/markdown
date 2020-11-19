@@ -6,8 +6,12 @@ class BoldBlock(Block):
     '''
         https://www.markdownguide.org/basic-syntax/#bold
     '''
-    def _render(self):
-        return '<strong>{}</strong>'.format(self.content())
+    def __init__(self, content, children=None):
+        super().__init__(content, children)
 
-    def render_html(self):
-        return '<strong>{}</strong>'
+    def render(self, format_functor):
+        rendered_children = []
+        for child in self._children:
+            rendered_children.append(child.render(format_functor))
+
+        return format_functor(self).format("".join(rendered_children))
