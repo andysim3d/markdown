@@ -176,10 +176,12 @@ class BlockParser(AbstractParser):
         if root is None:
             root = Element(content)
         cur_content = content
+        if (isinstance(root, FencedCodeBlock)):
+            return
         while cur_content:
             cur_content = self._invoke_parsers(root, cur_content)
         for child in root.children:
-            if (not isinstance(child, TextBlock)) and child.nested():
+            if (not isinstance(child,(TextBlock, CodeBlock))) and child.nested():
                 self.parse(child.content(), child)
         return root
 
