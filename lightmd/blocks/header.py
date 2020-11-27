@@ -11,6 +11,3 @@ class HeaderParagraph(Paragraph):
 
     def level(self):
         return self._level
-
-    def render(self):
-        return "<h{0}>{1}</h{0}>".format(self._level, self.content())

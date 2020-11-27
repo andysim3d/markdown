@@ -98,7 +98,6 @@ def test_nested_block_parser():
         2: TextBlock("abc")
     }
     root = block_parser.parse(content)
-    print(root.render())
     cur = root.children
     idx = 0
     while not cur:

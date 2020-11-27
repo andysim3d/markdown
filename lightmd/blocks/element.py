@@ -8,9 +8,19 @@ class Element(object):
             self._children = children
         self._parent = None
 
-    def render(self):
-        """render self as html format"""
-        return self._render()
+    def render(self, format_functor):
+        """
+            Takes a format functor that provides the paragraph's format in specific rendering.
+            Note that render() of super class Element has the same implementation of Paragraph.
+            For example:
+                In rending HTML, a QuoteParagraph instance calls format_functor(self)
+                will return "<blockquote>{}</blockquote>".
+        """
+        rendered_children = []
+        for child in self._children:
+            rendered_children.append(child.render(format_functor))
+
+        return format_functor(self).format("".join(rendered_children))
 
     def content(self):
         return self._content

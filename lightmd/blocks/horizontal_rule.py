@@ -9,6 +9,3 @@ class HorizontalRule(Paragraph):
     def nested(self):
         ''' Horizontal Rule has no child '''
         return False
-
-    def _render(self):
-        return '<hr>'
