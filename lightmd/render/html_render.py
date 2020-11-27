@@ -1,73 +1,100 @@
 from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
     HorizontalRule, ListParagraph, QuoteParagraph, BoldBlock, ItalicBlock, \
     ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock, ListWrapper
+import re
 
-
-<<<<<<< HEAD
-def render(root, css_path=None):
-    rendered_child = []
-    for paragraph in root.children:
-        rendered_child.append(_render_a_paragraph(paragraph))
-    if css_path:
-        rendered_child.insert(0, f'<head>\n<link rel="stylesheet" href="{css_path}">\n</head>')
-    return "<html>{}</html>".format("\n".join(rendered_child))
-
-
-def _render_a_paragraph(paragraph):
-    if isinstance(paragraph, HorizontalRule):
-        return "<hr/>"
-    if isinstance(paragraph, FencedCodeBlock):
-        return "<code>{}</code>".format(paragraph.content())
-    if isinstance(paragraph, HeaderParagraph):
-        return "<h{0}>{1}</h{0}>".format(paragraph.level(), paragraph.content())
-=======
 def get_html_format(node):
     # Root
     if type(node) is Element:
         return "<html>{}</html>"
     # Paragraph
     if isinstance(node, HorizontalRule):
-        return "<hr>"
+        style_class = get_style_class("hr")
+        return f"<hr{style_class}>"
     if isinstance(node, FencedCodeBlock):
-        return "<code>{}</code>"
+        style_class = get_style_class("code")
+        return f"<code{style_class}>{{}}</code>"
     if isinstance(node, HeaderParagraph):
-        return "<h{level}>{{}}</h{level}>".format(level=node.level())
->>>>>>> cab5ed3301697a3b633c8842c25ad5dd842fb20f
+        level = node.level()
+        style_class = get_style_class(f"h{level}")
+        return f"<h{level}{style_class}>{{}}</h{level}>"
 
     _format = ""
     if isinstance(node, TextParagraph):
-        _format = "<p>{}</p>"
+        style_class = get_style_class("p")
+        _format = f"<p{style_class}>{{}}</p>"
     if isinstance(node, ListWrapper):
         if node.is_ordered():
-            _format = "<ol>{}</ol>"
+            style_class = get_style_class("ol")
+            _format = f"<ol{style_class}>{{}}</ol>"
         else:
-            _format = "<ul>{}</ul>"
+            style_class = get_style_class("ul")
+            _format = f"<ul{style_class}>{{}}</ul>"
     if isinstance(node, QuoteParagraph):
-        _format = "<blockquote>{}</blockquote>"
+        style_class = get_style_class("blockquote")
+        _format = f"<blockquote{style_class}>{{}}</blockquote>"
 
     # Block
     if isinstance(node, TextBlock):
-        return '{}'
+        return "{}"
     if isinstance(node, ImgBlock):
-        return '<img src="{0}" alt="{1}">'.format(node.url(), node.content())
+        style_class = get_style_class("img")
+        return f'<img src="{node.url()}" alt="{node.content()}"{style_class}>'
     if isinstance(node, LinkBlock):
-        return '<a href="{0}">{1}</a>'.format(node.url(), node.content())
+        style_class = get_style_class("href")
+        return f'<a href="{node.url()}"{style_class}>{node.content()}</a>'
     if isinstance(node, CodeBlock):
-        return "<code>{}</code>"
+        style_class = get_style_class("code")
+        return f"<code{style_class}>{{}}</code>"
 
     if isinstance(node, ListParagraph):
-        _format = "<li>{}</li>"
+        style_class = get_style_class("li")
+        _format = f"<li{style_class}>{{}}</li>"
     if isinstance(node, BoldBlock):
-        _format = "<strong>{}</strong>"
+        style_class = get_style_class("strong")
+        _format = f"<strong{style_class}>{{}}</strong>"
     if isinstance(node, ItalicBlock):
-        _format = "<em>{}</em>"
+        style_class = get_style_class("em")
+        _format = f"<em{style_class}>{{}}</em>"
     if isinstance(node, StrikethroughBlock):
-        _format = "<del>{}</del>"
+        style_class = get_style_class("del")
+        _format = f"<del{style_class}>{{}}</del>"
     if isinstance(node, QuoteParagraph):
-        _format = "<blockquote>{}</blockquote>"
+        style_class = get_style_class("blockquote")
+        _format = f"<blockquote{style_class}>{{}}</blockquote>"
 
     return _format
 
-def render(root):
+def render(root, css_path=None):
     #print(HTML_FORMAT[HorizontalRule])
+    global STYLE_MAP
+    STYLE_MAP = parse_css(css_path)
     return root.render(get_html_format)
+
+def parse_css(css_path):
+    """parse css and return a global STYLE_MAP
+       which key is the element and value is the class name
+    """
+    if css_path is None:
+        return {}
+
+    STYLE_MAP = {}
+    with open(css_path, "r") as file:
+        pattern = r"^(.*)\.([^\s]*)(?:\s)*{$"
+        for line in file.readlines():
+            match = re.search(pattern, line)
+            if match:
+                element_name = match.group(1) and match.group(1) or "all"
+                if STYLE_MAP.get(element_name):
+                    STYLE_MAP[element_name] = f"{STYLE_MAP.get(element_name)} {match.group(2)}"
+                else:
+                    STYLE_MAP[element_name] = match.group(2)
+        
+    return STYLE_MAP
+
+def get_style_class(element_name):
+    class_name = STYLE_MAP.get(element_name, "")
+    apply_all = STYLE_MAP.get("all")
+    if apply_all:
+        class_name = f"{apply_all} {class_name}" if class_name else apply_all
+    return f' class="{class_name}"' if class_name else ""

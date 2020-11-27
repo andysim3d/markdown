@@ -1,0 +1,12 @@
+.all-class {
+    color: #f33;
+}
+  
+p.p-class {
+    background: #ffa;
+}
+  
+h1.h1-class {
+    font-weight: bold;
+    text-shadow: 4px 4px 3px #77f;
+}

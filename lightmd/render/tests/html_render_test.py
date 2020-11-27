@@ -1,8 +1,10 @@
 import pytest
+from unittest.mock import patch
+from pathlib import Path
 
-from ..render.html_render import render, get_html_format
-from ..parser.parser import parse_md_to_ast
-from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
+from ...render.html_render import render, get_html_format, parse_css, get_style_class
+from ...parser.parser import parse_md_to_ast
+from ...blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
     HorizontalRule, ListParagraph, QuoteParagraph, BoldBlock, ItalicBlock, \
     ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock, ListWrapper, \
     OrderedList, UnorderedList
@@ -145,3 +147,23 @@ def test_quote_render(content, html, children):
 def test_strikethrough_render(content, html):
     strikethrough_block = StrikethroughBlock(content)
     assert html == strikethrough_block.render(get_html_format)
+
+def test_parse_css():
+    style_map = parse_css(f"{Path(__file__).parent.absolute()}/sample_css.css")
+    expected_style_map = {
+        "all": "all-class",
+        "p": "p-class",
+        "h1": "h1-class"
+    }
+    assert expected_style_map == style_map
+
+@pytest.mark.parametrize("element_name, expected_style_class",
+[
+    ("p", ' class="all-class p-class"'),
+    ("h1", ' class="all-class h1-class"'),
+    ("hr", ' class="all-class"')
+])
+@patch('lightmd.render.html_render.STYLE_MAP' , { "all": "all-class", "p": "p-class", "h1": "h1-class" })
+def test_get_style_class(element_name, expected_style_class):
+    style_class = get_style_class(element_name)
+    assert expected_style_class == style_class
