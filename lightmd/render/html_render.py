@@ -1,7 +1,8 @@
+import re
 from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
     HorizontalRule, ListParagraph, QuoteParagraph, BoldBlock, ItalicBlock, \
     ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock, ListWrapper
-import re
+
 
 def get_html_format(node):
     # Root
@@ -65,11 +66,13 @@ def get_html_format(node):
 
     return _format
 
+
 def render(root, css_path=None):
-    #print(HTML_FORMAT[HorizontalRule])
+    # print(HTML_FORMAT[HorizontalRule])
     global STYLE_MAP
     STYLE_MAP = parse_css(css_path)
     return root.render(get_html_format)
+
 
 def parse_css(css_path):
     """parse css and return a global STYLE_MAP
@@ -78,19 +81,21 @@ def parse_css(css_path):
     if css_path is None:
         return {}
 
+    #pylint: disable=invalid-name
     STYLE_MAP = {}
     with open(css_path, "r") as file:
         pattern = r"^(.*)\.([^\s]*)(?:\s)*{$"
         for line in file.readlines():
             match = re.search(pattern, line)
             if match:
-                element_name = match.group(1) and match.group(1) or "all"
+                element_name = match.group(1) if match.group(1) else "all"
                 if STYLE_MAP.get(element_name):
                     STYLE_MAP[element_name] = f"{STYLE_MAP.get(element_name)} {match.group(2)}"
                 else:
                     STYLE_MAP[element_name] = match.group(2)
-        
+
     return STYLE_MAP
+
 
 def get_style_class(element_name):
     class_name = STYLE_MAP.get(element_name, "")
