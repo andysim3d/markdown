@@ -28,18 +28,18 @@ with open("your.md", "r") as md_file:
 
 ## Dev onboarding
 
-### Install Python 3.8
+### Install Python 3.7
 
 For Mac OS:
 
 ```
-brew install python@3.8
+brew install python@3.7
 ```
 
 For Windows User:
 
 ```
-choco install python --version=3.8.0
+choco install python --version=3.7
 ```
 
 ### Create Virtual Enviroment
