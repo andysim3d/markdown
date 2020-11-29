@@ -73,10 +73,10 @@ class ParagraphParser(AbstractParser):
             # try to eliminate empty lines
             begin, end, _ = parse_empty_newlines(content)
             if begin == 0:
-                ## put an empty text paragraph to avoid paragraph merge.
+                # put an empty text paragraph to avoid paragraph merge.
                 start_index, end_index, final_element = begin, end, TextParagraph(
                     "")
-                ## put an empty text paragraph to avoid paragraph merge.
+                # put an empty text paragraph to avoid paragraph merge.
             else:
                 start_index, end_index, final_element = self._default(
                     content[:start_index])
@@ -111,13 +111,15 @@ class ParagraphParser(AbstractParser):
         """
         if isinstance(new_element, ListParagraph):
             new_element_indent = new_element.indent
-            prev_list_element = self._find_prev_list_element(parent, new_element_indent)
+            prev_list_element = self._find_prev_list_element(
+                parent, new_element_indent)
             if prev_list_element.children:
                 if (isinstance(prev_list_element.children[-1], ListWrapper)
                         and prev_list_element.children[-1].is_ordered()
                         == new_element.is_ordered()):
                     return prev_list_element.children[-1]
-            virtual_list = ListWrapper([], new_element.is_ordered(), new_element_indent)
+            virtual_list = ListWrapper(
+                [], new_element.is_ordered(), new_element_indent)
             link_parent_and_child(prev_list_element, virtual_list)
             return prev_list_element.children[-1]
         return parent
@@ -176,10 +178,12 @@ class BlockParser(AbstractParser):
         if root is None:
             root = Element(content)
         cur_content = content
+        if isinstance(root, FencedCodeBlock):
+            return
         while cur_content:
             cur_content = self._invoke_parsers(root, cur_content)
         for child in root.children:
-            if (not isinstance(child, TextBlock)) and child.nested():
+            if (not isinstance(child, (TextBlock, CodeBlock))) and child.nested():
                 self.parse(child.content(), child)
         return root
 
