@@ -36,7 +36,7 @@ def parse_fenced_code_block(content):
         5) if the ending back-ticks are less than the starting ones,
             all the remaining content would be in a code block.
     '''
-    pattern = r'^ {0,3}(`{3,}) *([^\n]*)\s+(((?:.|\n)*)\n {0,3}(`{3,})\s*(.|\n)*)$'  # pylint: disable=line-too-long
+    pattern = r'^ {0,3}(`{3,}) *([^\n]*)\s+(((?:`{0,2}[^`]+)*)\n {0,3}(`{3,})\s*(.|\n)*)$'  # pylint: disable=line-too-long
 
     matches = re.search(pattern, content, re.MULTILINE)
     if matches:
