@@ -42,6 +42,30 @@ print(hello)
 print(hello)
 `````
             ''', 1, 26, 'cpp', 'print(hello)'),
+        # confusing multi triple back-ticks
+        ('''
+```
+a
+```
+b
+```
+            ''', 1, 10, None, 'a'),
+        # Code block with back-ticks inside
+        ('''
+```
+a
+``
+b
+```
+            ''', 1, 15, None, 'a\n``\nb'),
+        # Starting back-ticks more than ending back-ticks
+        ('''
+`````
+a
+``
+b
+```
+''', 1, 18, None, 'a\n``\nb\n```\n'),
     ])
 def test_parse(content, start, end, language, sub_content):
     (start_index, end_index, fcb) = parse_fenced_code_block(content)
