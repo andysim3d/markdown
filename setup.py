@@ -8,7 +8,7 @@ with open(path.join(THIS_DIRECTORY, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='lightmd',
-    version='0.0.1.2',
+    version='0.0.2.0',
     description=
     'This is a light-weighted, purly python made markdown parser and render',
     long_description=long_description,
