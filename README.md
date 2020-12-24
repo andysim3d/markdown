@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/andysim3d/markdown.svg?branch=master)](https://travis-ci.org/andysim3d/markdown)
 
+![Upload Python Package](https://github.com/andysim3d/markdown/workflows/Upload%20Python%20Package/badge.svg)
 A learn-motivated markdown parser.
 
 Supports all standard md elements.
