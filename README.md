@@ -21,9 +21,11 @@ import lightmd
 
 with open("your.md", "r") as md_file:
     ## Parse content
-    parsed_content = lightmd.parse_md_to_ast(md_file)
+    parsed_content = lightmd.parse_md_to_ast(md_file.read())
     ## Render to HTML
     rendered_html = lightmd.render_html(parsed_content)
+    ## Render to HTML with custom css style
+    rendered_html = lightmd.render_html(parsed_content, "/path/to/css_style.css")
 ```
 
 ## Dev onboarding

@@ -1,8 +1,10 @@
+from pathlib import Path
+from unittest.mock import patch
 import pytest
 
-from ..render.html_render import render, get_html_format
-from ..parser.parser import parse_md_to_ast
-from ..blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
+from ...render.html_render import render, get_html_format, parse_css, get_style_class
+from ...parser.parser import parse_md_to_ast
+from ...blocks import Element, TextParagraph, TextBlock, HeaderParagraph, \
     HorizontalRule, ListParagraph, QuoteParagraph, BoldBlock, ItalicBlock, \
     ImgBlock, LinkBlock, CodeBlock, FencedCodeBlock, StrikethroughBlock, ListWrapper, \
     OrderedList, UnorderedList
@@ -30,6 +32,7 @@ def test_bold_render(content, html, children):
     bold = BoldBlock(content, children=children)
     assert html == bold.render(get_html_format)
 
+
 @pytest.mark.parametrize("content, html", [
     ('print(hello world)', '<code>print(hello world)</code>'),
     ('print(hello `Andy`)', '<code>print(hello `Andy`)</code>'),
@@ -37,6 +40,7 @@ def test_bold_render(content, html, children):
 def test_code_render(content, html):
     fcb = CodeBlock(content)
     assert html == fcb.render(get_html_format)
+
 
 @pytest.mark.parametrize(
     "content, language, html",
@@ -55,6 +59,7 @@ def test_fenched_code_render(content, language, html):
     fcb = FencedCodeBlock(content, language)
     assert html == fcb.render(get_html_format)
 
+
 @pytest.mark.parametrize("content, level, html, children", [
     ('title', 1, '<h1>title</h1>', [TextBlock('title')]),
     (
@@ -69,9 +74,11 @@ def test_header_render(content, level, html, children):
     header = HeaderParagraph(content, level, children=children)
     assert html == header.render(get_html_format)
 
+
 def test_horizontal_rule_render():
     horiz_rule = HorizontalRule('')
     assert horiz_rule.render(get_html_format) == '<hr>'
+
 
 @pytest.mark.parametrize("content, url, html", [
     ('test image', "https://google.com/imagea",
@@ -81,12 +88,14 @@ def test_img_render(content, url, html):
     img = ImgBlock(content, url)
     assert html == img.render(get_html_format)
 
+
 @pytest.mark.parametrize("content, html",
                          [("testing text", "<em>testing text</em>"),
                           ("", "<em></em>")])
 def test_italic_render(content, html):
     italic_block = ItalicBlock(content)
     assert html == italic_block.render(get_html_format)
+
 
 @pytest.mark.parametrize("content, url, html",
                          [("google", "https://www.google.com",
@@ -95,17 +104,26 @@ def test_link_render(content, url, html):
     line_block = LinkBlock(content, url)
     assert html == line_block.render(get_html_format)
 
+
 @pytest.mark.parametrize("content, html, children",
-                         [("first item", "<li>first item</li>", [TextBlock('first item')]),
-                          (" second item", "<li> second item</li>", [TextBlock(' second item')])])
+                         [("first item",
+                           "<li>first item</li>",
+                           [TextBlock('first item')]),
+                             (" second item",
+                              "<li> second item</li>",
+                              [TextBlock(' second item')])])
 def test_ordered_render(content, html, children):
     ordered_list = OrderedList(content, children=children)
     assert html == ordered_list.render(get_html_format)
 
 
 @pytest.mark.parametrize("content, html, children",
-                         [("first item", "<li>first item</li>", [TextBlock('first item')]),
-                          (" second item", "<li> second item</li>", [TextBlock(' second item')])])
+                         [("first item",
+                           "<li>first item</li>",
+                           [TextBlock('first item')]),
+                             (" second item",
+                              "<li> second item</li>",
+                              [TextBlock(' second item')])])
 def test_unordered_render(content, html, children):
     unordered_list = UnorderedList(content, children=children)
     assert html == unordered_list.render(get_html_format)
@@ -130,14 +148,19 @@ def test_list_wrapper_render(content, ordered, html):
     list_wrapper = ListWrapper(content, is_ordered=ordered)
     assert html == list_wrapper.render(get_html_format)
 
-@pytest.mark.parametrize("content, html, children", [
-    (r'abc', r"<blockquote>abc</blockquote>", [TextBlock('abc')]),
-    (r'<html> rand tag </html>',
-     r"<blockquote><html> rand tag </html></blockquote>", [TextBlock('<html> rand tag </html>')]),
-])
+
+@pytest.mark.parametrize("content, html, children",
+                         [(r'abc',
+                           r"<blockquote>abc</blockquote>",
+                           [TextBlock('abc')]),
+                             (r'<html> rand tag </html>',
+                              r"<blockquote><html> rand tag </html></blockquote>",
+                              [TextBlock('<html> rand tag </html>')]),
+                          ])
 def test_quote_render(content, html, children):
     quote = QuoteParagraph(content, children=children)
     assert html == quote.render(get_html_format)
+
 
 @pytest.mark.parametrize("content, html",
                          [("testing text", "<del>testing text</del>"),
@@ -145,3 +168,26 @@ def test_quote_render(content, html, children):
 def test_strikethrough_render(content, html):
     strikethrough_block = StrikethroughBlock(content)
     assert html == strikethrough_block.render(get_html_format)
+
+
+def test_parse_css():
+    style_map = parse_css(f"{Path(__file__).parent.absolute()}/sample_css.css")
+    expected_style_map = {
+        "all": "all-class",
+        "p": "p-class",
+        "h1": "h1-class"
+    }
+    assert expected_style_map == style_map
+
+
+@pytest.mark.parametrize("element_name, expected_style_class",
+                         [
+                             ("p", ' class="all-class p-class"'),
+                             ("h1", ' class="all-class h1-class"'),
+                             ("hr", ' class="all-class"')
+                         ])
+@patch('lightmd.render.html_render.STYLE_MAP',
+       {"all": "all-class", "p": "p-class", "h1": "h1-class"})
+def test_get_style_class(element_name, expected_style_class):
+    style_class = get_style_class(element_name)
+    assert expected_style_class == style_class
